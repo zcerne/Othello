@@ -1,8 +1,14 @@
+import logika.Plosca;
 
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		Plosca plosca = new Plosca();
+		
+		Okno okno = new Okno();
+		
+		okno.pack();
+		okno.setVisible(true);
 
 	}
 
