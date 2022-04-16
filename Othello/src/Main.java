@@ -3,9 +3,10 @@ import logika.Plosca;
 public class Main {
 
 	public static void main(String[] args) {
-		Plosca plosca = new Plosca();
 		
 		Okno okno = new Okno();
+		
+		//da se scene vidjo
 		
 		okno.pack();
 		okno.setVisible(true);

@@ -5,12 +5,11 @@ public class Okno extends JFrame {
 	
 	private Platno platno;
 	
-	int test;
+	//platno ane...
 	public Okno() {
 		this.setTitle("Othello");
 		platno = new Platno();
 		this.add(platno);
-		test = 0;
 	}
 		
 }
