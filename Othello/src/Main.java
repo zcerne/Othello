@@ -1,4 +1,3 @@
-import logika.Plosca;
 
 public class Main {
 

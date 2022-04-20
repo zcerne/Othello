@@ -9,23 +9,25 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import logika.Plosca;
+import logika.Igra;
+import logika.Polje;
+import splosno.Poteza;
 
-public class Platno extends JPanel implements MouseListener, MouseMotionListener{
+public class Platno2 extends JPanel implements MouseListener, MouseMotionListener{
 	
 	int sizeX, sizeY;
 	int a;
 
 	
-	Plosca plosca;
+	Igra igra;
 	Color barvaOzadja;
 	
-	ArrayList<int[]> izberi;
+	ArrayList<Poteza> izberi;
 	
-	public Platno() {
+	public Platno2() {
 		super();
 		
-		this.plosca = new Plosca();
+		this.igra = new Igra();
 		
 		sizeX = sizeY = 800; //velikost okna
 		a = sizeX/8; //velikost kvadratka
@@ -35,7 +37,7 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		
-		izberi = plosca.dovoljenePoteze(); //poišče možne poteze igralca na vrsti in jih shrani v array kot koordionate (x,y)
+		izberi = igra.dovoljenePoteze(); //poišče možne poteze igralca na vrsti in jih shrani v array kot koordionate (x,y)
 		barvaOzadja = Color.green;
 
 		naPotezi(); //pove ti kdo je na potezi
@@ -45,8 +47,8 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 	}
 	
 	public void naPotezi() {
-		if (plosca.naVrsti == 1) System.out.println("Beli"); 
-		if (plosca.naVrsti == -1) System.out.println("Črni");
+		if (igra.naVrsti == Polje.BEL) System.out.println("Beli"); 
+		if (igra.naVrsti == Polje.CRN) System.out.println("Črni");
 	}
 	
 	protected void paintComponent(Graphics g1) {
@@ -70,11 +72,11 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 				g.drawRect(i*a, j*a, a, a);
 				
 				
-				if (plosca.polja[i][j] == 1) {
+				if (igra.polja[i][j] == Polje.BEL) {
 					g.setColor(Color.white);
 					g.fillOval(i*a + a/4, j*a + a/4, a/2, a/2);
 				}
-				else if (plosca.polja[i][j] == -1) {
+				else if (igra.polja[i][j] == Polje.CRN) {
 					g.setColor(Color.black);
 					g.fillOval(i*a + a/4, j*a + a/4, a/2, a/2);
 				}
@@ -90,9 +92,9 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		if (izberi != null) {
 			
 		
-			for(int[] pol : izberi) {
-				int i = pol[0];
-				int j = pol[1];
+			for(Poteza pol : izberi) {
+				int i = pol.getX();
+				int j = pol.getY();
 				g.setColor(Color.black);
 				g.drawOval(i*a + a/4, j*a + a/4, a/2, a/2);
 			}
@@ -128,18 +130,19 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 			for (int j = 0; j < 8; j++) {
 				if ((i*a <= moseX && moseX < i*a+a) && (j*a <= moseY && moseY < j*a + a)) {
 					//System.out.println("Pred iskanjem");
-					ArrayList<int[]> izbrani = plosca.izvediPotezo(i, j);
+					Poteza poteza = new Poteza(i,j);
+					ArrayList<Poteza> izbrani = igra.izvediPotezo(poteza);
 					
 					
 					if(izbrani.size() != 0) {
-						plosca.polja[i][j] = plosca.naVrsti; //ki vrne vse krogce na katere poteza vpliva 
-						for(int[] izb : izbrani) {
-							int x = izb[0];
-							int y = izb[1];
-							plosca.polja[x][y] = plosca.naVrsti; //in jih nato obrne 
+						igra.polja[i][j] = igra.naVrsti; //ki vrne vse krogce na katere poteza vpliva 
+						for(Poteza izb : izbrani) {
+							int x = izb.getX();
+							int y = izb.getY();
+							igra.polja[x][y] = igra.naVrsti; //in jih nato obrne 
 						}
 						
-						plosca.naVrsti *= -1; // zamenja igralca
+						igra.naVrsti = igra.naVrsti.obrat(); // zamenja igralca
 					}
 					//System.out.println("Po iskanju");	
 				}
@@ -148,10 +151,10 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		
 		if(izberi.size() == 0) { // če pač ni možnosti ni možnosti in spet zamenja igralca
 			System.out.println("Nimaš možnosti");
-			plosca.naVrsti *= -1;	
+			igra.naVrsti = igra.naVrsti.obrat();	
 		}
 		
-		izberi = plosca.dovoljenePoteze(); //posodobi možnosti
+		izberi = igra.dovoljenePoteze(); //posodobi možnosti
 		this.repaint();
 		naPotezi();
 		
