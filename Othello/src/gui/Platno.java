@@ -59,8 +59,8 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		//gre čez celotno ploščo in nariše krog z barvo glede na vrednost v matriki pl0šče....................
 		
 		int a = kvadratek();
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
+		for (int i = 0; i < Igra.N; i++) {
+			for (int j = 0; j < Igra.N; j++) {
 				g.setColor(barvaOzadja);
 				g.fillRect(i*a, j*a, a, a);
 				g.setColor(Color.black);

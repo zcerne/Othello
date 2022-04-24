@@ -72,7 +72,7 @@ public class Vodja {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
 			@Override
 			protected Void doInBackground() {
-				try {TimeUnit.MILLISECONDS.sleep(1000);} catch (Exception e) {};	
+				try {TimeUnit.MILLISECONDS.sleep(10);} catch (Exception e) {};	
 				return null;
 			}
 			@Override

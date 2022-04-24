@@ -20,7 +20,7 @@ public class Igra {
 	public Map<Polje, Integer> rezultat;
 	public Igra() {
 		
-		N = 8;
+		N = 40;
 		polja = new Polje[N][N];
 		for(int i = 0; i < N; i++) {
 			for(int j = 0; j < N; j++) {
@@ -163,7 +163,7 @@ public class Igra {
 	
 	//vrne stanje igre. Očitno je mogoče da se celotna plošča sploh ne zapolni. Zato tok komplikacij. Za primer če noben nima možnosti sem "preprosto" (lol) vpelajl counter nemožnosti.
 	public Stanje stanjeIgre() {		
-		if(rezultat.get(Polje.BEL) + rezultat.get(Polje.CRN) == 64 || stejMoznosti >= 2) {
+		if(rezultat.get(Polje.BEL) + rezultat.get(Polje.CRN) == N*N || stejMoznosti >= 2) {
 			
 			if(stejMoznosti >= 2)System.out.println("Noben nima možnosti");
 			
@@ -172,7 +172,7 @@ public class Igra {
 			else if (rezultat.get(Polje.CRN) == rezultat.get(Polje.BEL)) return Stanje.NEODLOCENO;
 			
 		}
-		else if(rezultat.get(Polje.BEL) + rezultat.get(Polje.CRN) < 64 ) return Stanje.V_TEKU;
+		else if(rezultat.get(Polje.BEL) + rezultat.get(Polje.CRN) < N*N ) return Stanje.V_TEKU;
 		System.out.println("Neki ne dela v stanjeIgre. Vračam NULL.");
 		return null;
 	}
