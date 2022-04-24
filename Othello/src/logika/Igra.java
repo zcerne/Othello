@@ -28,10 +28,10 @@ public class Igra {
 			}
 		}
 		
-		polja[3][3] = Polje.CRN;
-		polja[3][4] = Polje.BEL;
-		polja[4][3] = Polje.BEL;
-		polja[4][4] = Polje.CRN;
+		polja[N/2-1][N/2-1] = Polje.CRN;
+		polja[N/2-1][N/2] = Polje.BEL;
+		polja[N/2][N/2-1] = Polje.BEL;
+		polja[N/2][N/2] = Polje.CRN;
 		
 		naVrsti = Igralec.CRN;
 		
@@ -70,7 +70,7 @@ public class Igra {
 		return false;
 	}
 	public void naPotezi() {
-		System.out.println(naVrsti); 
+		//System.out.println(naVrsti); 
 	}
 	
 	public ArrayList<Poteza> izvediPotezo(Poteza poteza) {

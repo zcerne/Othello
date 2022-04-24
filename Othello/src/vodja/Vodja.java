@@ -36,7 +36,7 @@ public class Vodja {
 		igra.naPotezi();
 		igra.prestejTocke();
 		okno.repaint();
-		System.out.println("Rezultat: " + "CRNI: " + igra.rezultat.get(Polje.CRN) + "       BELI: " + igra.rezultat.get(Polje.BEL));
+		//System.out.println("Rezultat: " + "CRNI: " + igra.rezultat.get(Polje.CRN) + "       BELI: " + igra.rezultat.get(Polje.BEL));
 		switch(igra.stanjeIgre()) {
 		case NEODLOCENO:
 			System.out.println("NEODLOČENO");
@@ -72,7 +72,7 @@ public class Vodja {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
 			@Override
 			protected Void doInBackground() {
-				try {TimeUnit.MILLISECONDS.sleep(10);} catch (Exception e) {};	
+				try {TimeUnit.MILLISECONDS.sleep(1);} catch (Exception e) {};	
 				return null;
 			}
 			@Override
