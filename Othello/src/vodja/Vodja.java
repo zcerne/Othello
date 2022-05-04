@@ -13,6 +13,8 @@ import logika.Igra;
 import logika.Igralec;
 import logika.Polje;
 import splosno.Poteza;
+import inteligenca.Inteligenca;
+import inteligenca.Minimax;
 
 public class Vodja {
 
@@ -35,39 +37,42 @@ public class Vodja {
 	public static void igramo() {
 		igra.naPotezi();
 		igra.prestejTocke();
+		//igra.rezultat();
 		okno.repaint();
-		//System.out.println("Rezultat: " + "CRNI: " + igra.rezultat.get(Polje.CRN) + "       BELI: " + igra.rezultat.get(Polje.BEL));
+		
 		switch(igra.stanjeIgre()) {
 		case NEODLOCENO:
 			System.out.println("NEODLOČENO");
 			return;
 		case ZMAGA_BEL:
 			System.out.println("BELI ZMAGA");
+			igra.rezultat();
 			return;
 		case ZMAGA_CRN:
 			System.out.println("ČRNI ZMAGA");
 			return;
 		case V_TEKU:
-			
-			if(moznost()) { //te neumne možnosti so narjene mal chonky. Igraj samo če imaš možnost. Če je nimaš bo možnost() zamenjala igralca. 
+			if(!moznost()) igrajPotezo(null);
+			else {
+ //te neumne možnosti so narjene mal chonky. Igraj samo če imaš možnost. Če je nimaš bo možnost() zamenjala igralca. 
 				VrstaIgralca vrstaNaVrsti = vrstaIgralca.get(igra.naVrsti);
 				switch(vrstaNaVrsti) {
 				case C:
 					clovekNaPotezi = true;
+					 
 					break;
 				case R: racunalnikovaPoteza();
 					break;
 					
 				}
 			}
-			else {
-			igra.naVrsti = igra.naVrsti.obrat();
-			igramo();
-			}
 		}
-		
+
 	}
 	// sleep scene kokr je naredu profesor
+	public static Inteligenca inteligenca = new Inteligenca();
+	public static Minimax minimax = new Minimax(3);
+	
 	private static void racunalnikovaPoteza() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
 			@Override
@@ -78,13 +83,19 @@ public class Vodja {
 			@Override
 			protected void done () {
 				
-				Poteza racPoteza = igra.racunalnikovaPoteza();
-				//if(racPoteza == null) {
-					//igra.naVrsti.obrat();
-					//igramo();
-				//}
+				Poteza racPoteza = null;
+				switch(igra.naVrsti) {
+				case CRN: 
+					racPoteza = inteligenca.izberiPotezo(igra);
+					break;
+				case BEL: 
+					racPoteza = minimax.izberiPotezo(igra);
+					break;
+				}
 				igrajPotezo(racPoteza);
-			}
+				
+				}
+
 		};
 		worker.execute();
 	}
@@ -92,8 +103,7 @@ public class Vodja {
 	
 	public static void igrajPotezo(Poteza poteza) {
 		if(igra.odigraj(poteza)) {
-			
-			igra.naVrsti = igra.naVrsti.obrat(); // zamenja igralca
+			//igra.naVrsti = igra.naVrsti.obrat(); // zamenja igralca
 			clovekNaPotezi = false;
 		}
 		igramo();
@@ -101,15 +111,10 @@ public class Vodja {
 
 	public static boolean moznost() {
 		if(!igra.moznost()) {
-			igra.stejMoznosti += 1;
-			System.out.println("Nimaš možnosti");
-		}
-		else {
-			igra.stejMoznosti = 0;
+			//System.out.println(igra.stejMoznosti);
+			//System.out.println(igra.naVrsti + "Nimaš možnosti");
 		}
 		return igra.moznost();
 		
 		}
-		
-		
 	}

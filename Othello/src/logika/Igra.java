@@ -9,7 +9,7 @@ import splosno.Poteza;
 
 public class Igra {
 	
-	public static Polje[][] polja;
+	public Polje[][] polja;
 	public Igralec naVrsti;
 	
 	private static Random random = new Random ();
@@ -18,9 +18,10 @@ public class Igra {
 	public int stejMoznosti;
 	
 	public Map<Polje, Integer> rezultat;
+	
 	public Igra() {
 		
-		N = 40;
+		N = 8;
 		polja = new Polje[N][N];
 		for(int i = 0; i < N; i++) {
 			for(int j = 0; j < N; j++) {
@@ -43,21 +44,41 @@ public class Igra {
 		
 	}
 	
-	public boolean odigraj(Poteza poteza) {
-		ArrayList<Poteza> dobljeniZetoni = izvediPotezo(poteza);
-		if(dobljeniZetoni.size() != 0) {
-			int i = poteza.getX();
-			int j = poteza.getY();
-			polja[i][j] = naVrsti.dobiPolje(); //vrne vse krogce na katere poteza vpliva 
-			for(Poteza izb : dobljeniZetoni) {
-				int x = izb.getX();
-				int y = izb.getY();
-				polja[x][y] = naVrsti.dobiPolje(); //in jih nato obrne 
+	public Igra(Igra igra) {
+		this.polja = new Polje[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				this.polja[i][j] = igra.polja[i][j];
 			}
-			return true;
 		}
 		
-		return false;
+		this.rezultat = igra.rezultat;
+		this.naVrsti = igra.naVrsti;
+	}
+	
+	public boolean odigraj(Poteza poteza) {
+		if(poteza != null) {
+			ArrayList<Poteza> dobljeniZetoni = izvediPotezo(poteza);
+			if(dobljeniZetoni.size() != 0) {
+				int i = poteza.getX();
+				int j = poteza.getY();
+				polja[i][j] = naVrsti.dobiPolje(); //vrne vse krogce na katere poteza vpliva 
+				for(Poteza izb : dobljeniZetoni) {
+					int x = izb.getX();
+					int y = izb.getY();
+					polja[x][y] = naVrsti.dobiPolje(); //in jih nato obrne 
+				}
+				naVrsti = naVrsti.obrat();
+				stejMoznosti = 0;
+				return true;
+			}
+			else return false;
+		}
+		else {
+			stejMoznosti +=1;
+			naVrsti = naVrsti.obrat();
+			return true;
+		}
 	}
 	
 	public boolean lahkoOdigram(Poteza poteza) {
@@ -115,16 +136,15 @@ public class Igra {
 		return izbrani; //vrnem vse žetone, ki jih s to potezo dobim
 	}
 	
-	public ArrayList<Poteza> dovoljenePoteze(){ // izvede metodo izvediPotezo za vsa polja in gleda kdaj je rezultat večji od nič
+	public ArrayList<Poteza> dovoljenePoteze(){ 
 		ArrayList<Poteza> volni = new ArrayList<>();
 		//ArrayList<ArrayList<int[]>> listList = new ArrayList<>();
 		for(int i = 0; i < N; i++) {
 			for(int j = 0; j < N; j++) {
 				Poteza poteza = new Poteza(i,j);
 				boolean dovoljena = lahkoOdigram(poteza);
-				Poteza izb = new Poteza(i,j);
 				if (dovoljena) {
-					volni.add(izb);
+					volni.add(poteza);
 					//listList.add(izbrani); #to bi mogl bit vsi k jih obrnem s to potezo
 				}
 			}
@@ -153,6 +173,11 @@ public class Igra {
 		rezultat.put(Polje.BEL, beli);
 	}
 	
+	public void rezultat() {
+		System.out.println("Rezultat: " + "CRNI: " + rezultat.get(Polje.CRN) + "       BELI: " + rezultat.get(Polje.BEL));
+		
+	}
+	
 	public boolean moznost() {
 		ArrayList<Poteza> poteze = dovoljenePoteze();
 		if(poteze.size() == 0) { // če pač ni možnosti ni možnosti in spet zamenja igralca
@@ -176,18 +201,7 @@ public class Igra {
 		System.out.println("Neki ne dela v stanjeIgre. Vračam NULL.");
 		return null;
 	}
-	
-	//TUKAJ VSTAVI PROGRAM, KI NAJDE OPTIMALNO POTEZO GLEDE NA DANO PLOŠČO. IN IZBIRO. 
-	public Poteza racunalnikovaPoteza() {
-			
-		//MISLM DA SM NAREDU TKO DA ČE NIMA MOŽNOSTI TE FUNKCIJE SPLOH NE KLIČE IN NIMA PROBLEMA Z NULLOM. POUDAREK NA MISLM.
-			ArrayList<Poteza> izbira = dovoljenePoteze();
-			int randomIndex = random.nextInt(izbira.size());
-			return izbira.get(randomIndex);
-			
-			
-		
-	}
+
 	//ne štekam fore statičnih metod. Tko je naredu profesor. Ne vem zaklajajajndjasbfdhuasfvhdsga.
 	public Polje[][] getPlosca() {
 		
