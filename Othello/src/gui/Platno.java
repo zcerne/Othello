@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.swing.JPanel;
 
@@ -23,6 +24,7 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 	Color barvaOzadja;
 	
 	ArrayList<Poteza> izberi;
+	HashSet<Poteza> izberi2;
 
 	public Platno() {
 		super();

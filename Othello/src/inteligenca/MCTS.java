@@ -6,19 +6,20 @@ import splosno.Poteza;
 
 public class MCTS extends Inteligenca {
 	
-//	private int globina;
-//	
-//	public MCTS (int globina) {
-//		this.globina = globina;
-//	}
-//	
+	private int globina;
+	
+	public MCTS (int globina) {
+		this.globina = globina;
+	}
+}
+	
 //	@Override
 //	public Poteza izberiPotezo (Igra igra) {
 //		OcenjenaPoteza najboljsaPoteza = monte_carlo_tree_search(igra, this.globina, igra.naVrsti);
 //		return najboljsaPoteza.poteza;	
-	}
-	
-	//	public monte_carlo_tree_search(Igra igra, int globina, Igralec jaz){
+//	}
+//	
+//	public monte_carlo_tree_search(Igra igra, int globina, Igralec jaz){
 //	    while resources_left(time, computational power):
 //	        leaf = traverse(root) # leaf = unvisited node 
 //	        simulation_result = rollout(leaf)

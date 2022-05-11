@@ -21,7 +21,7 @@ public class Minimax extends Inteligenca {
 	@Override
 	public Poteza izberiPotezo (Igra igra) {
 		OcenjenaPoteza najboljsaPoteza = minimax(igra, this.globina, igra.naVrsti);
-		return najboljsaPoteza.poteza;	
+		return najboljsaPoteza.poteza;
 	}
 	
 	// vrne najboljso ocenjeno potezo z vidike igralca jaz

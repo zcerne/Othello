@@ -2,8 +2,10 @@ package logika;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import splosno.Poteza;
 
@@ -18,6 +20,9 @@ public class Igra {
 	public int stejMoznosti;
 	
 	public Map<Polje, Integer> rezultat;
+	public Set<Poteza> zasedeni;
+	public Set<Poteza> potencialnoDovoljenePoteze;
+	
 	
 	public Igra() {
 		
@@ -28,11 +33,20 @@ public class Igra {
 				polja[i][j] = Polje.PRAZNO;
 			}
 		}
+		zasedeni = new HashSet<Poteza>();
+		potencialnoDovoljenePoteze = new HashSet<Poteza>();
 		
 		polja[N/2-1][N/2-1] = Polje.CRN;
 		polja[N/2-1][N/2] = Polje.BEL;
 		polja[N/2][N/2-1] = Polje.BEL;
 		polja[N/2][N/2] = Polje.CRN;
+		
+		zasedeni.add(new Poteza(N/2-1, N/2-1));
+		zasedeni.add(new Poteza(N/2-1, N/2));
+		zasedeni.add(new Poteza(N/2, N/2-1));
+		zasedeni.add(new Poteza(N/2, N/2));
+		
+		potencialnoDovoljene();
 		
 		naVrsti = Igralec.CRN;
 		
@@ -43,6 +57,32 @@ public class Igra {
 		rezultat.put(Polje.BEL, 2);
 		
 	}
+	public void potencialnoDovoljene() {
+		int[][] smeri = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1,1}, {-1,1}, {1,-1}, {-1,-1}};
+		for (Poteza p : zasedeni) {
+			dodajSosede(p);		
+		}
+	}
+	
+	public void dodajSosede(Poteza p) {
+		int[][] smeri = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1,1}, {-1,1}, {1,-1}, {-1,-1}};
+		int x = p.getX();
+		int y = p.getY();
+		int i = 0;
+		for(int[] s : smeri) {
+			int dx = s[0];
+			int dy = s[1];
+			if(x+dx >= N || x+dx < 0 || y + dy >= N || y + dy < 0);
+			else {
+				Poteza n = new Poteza(x+dx, y+dy);
+				if(zasedeni.contains(n));
+				else {
+					potencialnoDovoljenePoteze.add(n);
+					//System.out.println("Dodano" + n);
+				}
+			}
+		}
+	}
 	
 	public Igra(Igra igra) {
 		this.polja = new Polje[N][N];
@@ -52,8 +92,19 @@ public class Igra {
 			}
 		}
 		
-		this.rezultat = igra.rezultat;
+		this.rezultat = new EnumMap<Polje, Integer>(Polje.class);
+		this.rezultat.put(Polje.CRN, igra.rezultat.get(Polje.CRN));
+		this.rezultat.put(Polje.BEL, igra.rezultat.get(Polje.BEL));
 		this.naVrsti = igra.naVrsti;
+		
+		this.zasedeni = new HashSet<Poteza>();
+		this.potencialnoDovoljenePoteze = new HashSet<Poteza>();
+		for(Poteza p : igra.zasedeni) {
+				this.zasedeni.add(p);
+			}
+		for(Poteza p : igra.potencialnoDovoljenePoteze) {
+			this.potencialnoDovoljenePoteze.add(p);
+		}
 	}
 	
 	public boolean odigraj(Poteza poteza) {
@@ -62,12 +113,18 @@ public class Igra {
 			if(dobljeniZetoni.size() != 0) {
 				int i = poteza.getX();
 				int j = poteza.getY();
-				polja[i][j] = naVrsti.dobiPolje(); //vrne vse krogce na katere poteza vpliva 
+				
+				polja[i][j] = naVrsti.dobiPolje();//vrne vse krogce na katere poteza vpliva
+				zasedeni.add(poteza);
+				
+				potencialnoDovoljenePoteze.remove(poteza);
+				dodajSosede(poteza);
 				for(Poteza izb : dobljeniZetoni) {
 					int x = izb.getX();
 					int y = izb.getY();
-					polja[x][y] = naVrsti.dobiPolje(); //in jih nato obrne 
+					polja[x][y] = naVrsti.dobiPolje();//in jih nato obrne
 				}
+				posodobiRezultat(dobljeniZetoni);
 				naVrsti = naVrsti.obrat();
 				stejMoznosti = 0;
 				return true;
@@ -136,7 +193,7 @@ public class Igra {
 		return izbrani; //vrnem vse žetone, ki jih s to potezo dobim
 	}
 	
-	public ArrayList<Poteza> dovoljenePoteze(){ 
+	/*public ArrayList<Poteza> dovoljenePoteze(){ 
 		ArrayList<Poteza> volni = new ArrayList<>();
 		//ArrayList<ArrayList<int[]>> listList = new ArrayList<>();
 		for(int i = 0; i < N; i++) {
@@ -151,9 +208,32 @@ public class Igra {
 		}
 		
 		return volni;
+	}*/
+	
+	public ArrayList<Poteza> dovoljenePoteze(){ 
+		ArrayList<Poteza> volni = new ArrayList<>();
+		//ArrayList<ArrayList<int[]>> listList = new ArrayList<>();
+		for(Poteza poteza : potencialnoDovoljenePoteze) {
+				boolean dovoljena = lahkoOdigram(poteza);
+				if (dovoljena) {
+					volni.add(poteza);
+					//listList.add(izbrani); #to bi mogl bit vsi k jih obrnem s to potezo
+				}
+		}
+		return volni;
 	}
 	
-	public void prestejTocke() {
+	public void posodobiRezultat(ArrayList<Poteza> tocke) {
+		int st = tocke.size();
+		Polje polje1 = naVrsti.dobiPolje();
+		Polje polje2 = naVrsti.obrat().dobiPolje();
+		int t1 = rezultat.get(polje1);
+		int t2 = rezultat.get(polje2);
+		rezultat.put(polje1, t1 + st + 1);
+		rezultat.put(polje2, t2 - st);
+	}
+	
+	/*public void prestejTocke() {
 		int crni = 0;
 		int beli = 0;
 		
@@ -171,7 +251,7 @@ public class Igra {
 		}
 		rezultat.put(Polje.CRN, crni);
 		rezultat.put(Polje.BEL, beli);
-	}
+	}*/
 	
 	public void rezultat() {
 		System.out.println("Rezultat: " + "CRNI: " + rezultat.get(Polje.CRN) + "       BELI: " + rezultat.get(Polje.BEL));
@@ -180,7 +260,7 @@ public class Igra {
 	
 	public boolean moznost() {
 		ArrayList<Poteza> poteze = dovoljenePoteze();
-		if(poteze.size() == 0) { // če pač ni možnosti ni možnosti in spet zamenja igralca
+		if(poteze.size() == 0) { // če pač ni možnosti ni možnosti
 			return false;
 		}
 		return true;	

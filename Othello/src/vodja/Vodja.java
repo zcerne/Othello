@@ -36,10 +36,10 @@ public class Vodja {
 	//preverja kdo ali kaj je na vrsti in ja...
 	public static void igramo() {
 		igra.naPotezi();
-		igra.prestejTocke();
+		//igra.prestejTocke();
 		//igra.rezultat();
-		okno.repaint();
-		
+		//okno.repaint();
+		//System.out.println("Igramo");
 		switch(igra.stanjeIgre()) {
 		case NEODLOCENO:
 			System.out.println("NEODLOČENO");
@@ -50,6 +50,7 @@ public class Vodja {
 			return;
 		case ZMAGA_CRN:
 			System.out.println("ČRNI ZMAGA");
+			igra.rezultat();
 			return;
 		case V_TEKU:
 			if(!moznost()) igrajPotezo(null);
@@ -74,31 +75,33 @@ public class Vodja {
 	public static Minimax minimax = new Minimax(3);
 	
 	private static void racunalnikovaPoteza() {
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
+		/*SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
 			@Override
 			protected Void doInBackground() {
 				try {TimeUnit.MILLISECONDS.sleep(1);} catch (Exception e) {};	
 				return null;
 			}
 			@Override
-			protected void done () {
+			protected void done () {*/
 				
 				Poteza racPoteza = null;
+				//System.out.println("NEKEJ");
 				switch(igra.naVrsti) {
-				case CRN: 
+				case CRN:
+					
 					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				case BEL: 
-					racPoteza = minimax.izberiPotezo(igra);
+					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				}
 				igrajPotezo(racPoteza);
 				
 				}
 
-		};
+		/*};
 		worker.execute();
-	}
+	}*/
 	
 	
 	public static void igrajPotezo(Poteza poteza) {
@@ -106,6 +109,7 @@ public class Vodja {
 			//igra.naVrsti = igra.naVrsti.obrat(); // zamenja igralca
 			clovekNaPotezi = false;
 		}
+		//System.out.println("IgrajPotezo");
 		igramo();
 	}
 
