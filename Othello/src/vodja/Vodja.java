@@ -1,6 +1,7 @@
 package vodja;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -8,7 +9,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.SwingWorker;
 
+import gui.Gumb;
 import gui.Okno;
+import gui.StanjeZaslona;
 import logika.Igra;
 import logika.Igralec;
 import logika.Polje;
@@ -16,18 +19,55 @@ import splosno.Poteza;
 import inteligenca.Inteligenca;
 import inteligenca.Minimax;
 
+
 public class Vodja {
 
 	VrstaIgralca naVrsti;
 	
 	public static Okno okno;
 	public static Igra igra;
-	
 	public static Map<Igralec,VrstaIgralca> vrstaIgralca;
 
 	public static boolean clovekNaPotezi;
 	
+	public static StanjeZaslona stanjeZaslona;
+	
 	//požene se na začetku igre.
+	
+	public static void dolociIgralce(String gumb) {
+		if (gumb == "IGRA1") {
+			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
+			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
+			stanjeZaslona = StanjeZaslona.IGRA;
+			igramoNovoIgro();
+			
+		}
+		else if (gumb == "IGRA2") {
+			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
+			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
+			stanjeZaslona = StanjeZaslona.IGRA;
+			igramoNovoIgro();
+			
+		}
+		else if (gumb == "IGRA3") {
+			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
+			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
+			stanjeZaslona = StanjeZaslona.IGRA;
+			igramoNovoIgro();
+			
+		}
+		else if (gumb == "IGRA4") {
+			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
+			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
+			stanjeZaslona = StanjeZaslona.IGRA;
+			igramoNovoIgro();
+			
+		}
+	}
 	public static void igramoNovoIgro () {
 		igra = new Igra ();
 		igramo ();
@@ -38,7 +78,8 @@ public class Vodja {
 		igra.naPotezi();
 		igra.prestejTocke();
 		//igra.rezultat();
-		okno.repaint();
+		//okno.repaint();
+		okno.osveziGUI();
 		
 		switch(igra.stanjeIgre()) {
 		case NEODLOCENO:

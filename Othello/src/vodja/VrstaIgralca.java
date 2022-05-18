@@ -6,8 +6,8 @@ public enum VrstaIgralca {
 	@Override
 	public String toString() {
 		switch(this){
-		case C: return "Na potezi je človek";
-		case R: return "Na potezi je računalnik";
+		case C: return "Človek";
+		case R: return "Računalnik";
 		default: assert false; return "";
 		}
 		

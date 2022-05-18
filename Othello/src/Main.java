@@ -1,6 +1,7 @@
 import java.util.EnumMap;
 
 import gui.Okno;
+import gui.StanjeZaslona;
 import logika.Igra;
 import logika.Igralec;
 import vodja.Vodja;
@@ -17,15 +18,17 @@ public class Main {
 		okno.setVisible(true);
 		
 		Vodja.okno = okno;
+		Vodja.stanjeZaslona = StanjeZaslona.MENU;
+		
 		//vrsta igralca kot je to storil profesor
-		Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+		/*Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 		
 		// za to bi blo fajn nardit GUI za izbiro različnih opcij
 		Vodja.vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R);
-		Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
+		Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
 		
 		//poženi da se igra začne
-		Vodja.igramoNovoIgro();
+		Vodja.igramoNovoIgro();*/
 
 	}
 
