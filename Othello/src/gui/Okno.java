@@ -7,12 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EnumMap;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import logika.Igra;
 import logika.Igralec;
 import splosno.KdoIgra;
 import vodja.Vodja;
@@ -28,6 +30,8 @@ public class Okno extends JFrame implements ActionListener {
 	private JMenuItem igraRacunalnikClovek;
 	private JMenuItem igraClovekClovek;
 	private JMenuItem igraRacunalnikRacunalnik;
+	private JMenuItem igraUndo;
+	private JButton undo;
 	//platno ane...
 	public Okno() {
 		super();
@@ -44,6 +48,10 @@ public class Okno extends JFrame implements ActionListener {
 		this.setJMenuBar(menu_bar);
 		JMenu igra_menu = new JMenu("Nova igra");
 		menu_bar.add(igra_menu);
+		
+		undo = new JButton("UNDO");
+		menu_bar.add(undo);
+		undo.addActionListener(this);
 		
 		igraClovekRacunalnik = new JMenuItem("Človek – računalnik");
 		igra_menu.add(igraClovekRacunalnik);
@@ -111,6 +119,10 @@ public class Okno extends JFrame implements ActionListener {
 			Vodja.igramoNovoIgro();
 		}
 		
+		else if (Vodja.stanjeZaslona == StanjeZaslona.IGRA  && e.getSource() == undo) {
+			Vodja.gumb(VrstaGumba.UNDO);
+		}
+		
 	}
 	
 	public void osveziGUI() {
@@ -122,7 +134,8 @@ public class Okno extends JFrame implements ActionListener {
 			case NEODLOCENO: status.setText("Neodločeno!"); break;
 			case V_TEKU: 
 				status.setText(Vodja.igra.naVrsti + 
-						" - " + Vodja.vrstaIgralca.get(Vodja.igra.naVrsti)); 
+						" - " + Vodja.vrstaIgralca.get(Vodja.igra.naVrsti) + " : " + Vodja.igra.rezultat()); 
+				
 				break;
 			case ZMAGA_CRN: 
 				status.setText("Zmagal je CRNI - " + Vodja.vrstaIgralca.get(Vodja.igra.naVrsti) + "  " + Vodja.igra.rezultat() );

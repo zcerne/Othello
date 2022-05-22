@@ -12,6 +12,7 @@ import javax.swing.SwingWorker;
 import gui.Gumb;
 import gui.Okno;
 import gui.StanjeZaslona;
+import gui.VrstaGumba;
 import logika.Igra;
 import logika.Igralec;
 import logika.Polje;
@@ -27,6 +28,8 @@ public class Vodja {
 	public static Okno okno;
 	public static Igra igra;
 	public static Map<Igralec,VrstaIgralca> vrstaIgralca;
+	
+	public static ArrayList<Igra> zgodovina;
 
 	public static boolean clovekNaPotezi;
 	
@@ -34,42 +37,62 @@ public class Vodja {
 	
 	//požene se na začetku igre.
 	
-	public static void dolociIgralce(String gumb) {
-		if (gumb == "IGRA1") {
+	public static void gumb(VrstaGumba gumb) {
+		switch(gumb) {
+		
+		case II:
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
 			stanjeZaslona = StanjeZaslona.IGRA;
 			igramoNovoIgro();
+			break;
 			
-		}
-		else if (gumb == "IGRA2") {
-			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
-			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
-			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
-			stanjeZaslona = StanjeZaslona.IGRA;
-			igramoNovoIgro();
-			
-		}
-		else if (gumb == "IGRA3") {
+		case IR :
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
 			stanjeZaslona = StanjeZaslona.IGRA;
 			igramoNovoIgro();
+			break;
+		
+		case RI :
+			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
+			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
+			stanjeZaslona = StanjeZaslona.IGRA;
+			igramoNovoIgro();
+			break;
 			
-		}
-		else if (gumb == "IGRA4") {
+		
+		case RR : 
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
 			stanjeZaslona = StanjeZaslona.IGRA;
 			igramoNovoIgro();
 			
+		
+		case UNDO : 
+			int ind = Vodja.zgodovina.size() - 1;
+			int di = 0;
+				if(Vodja.vrstaIgralca.get(Igralec.CRN) == VrstaIgralca.R || Vodja.vrstaIgralca.get(Igralec.BEL) == VrstaIgralca.R) di = 2;
+				else if (Vodja.vrstaIgralca.get(Igralec.CRN) == VrstaIgralca.C && Vodja.vrstaIgralca.get(Igralec.BEL) == VrstaIgralca.C) di = 1;
+				
+				if(ind >= di) {
+				Vodja.igra = new Igra(Vodja.zgodovina.get(ind-di));
+				Vodja.zgodovina.remove(ind);
+				if(di == 2) Vodja.zgodovina.remove(ind-1);
+				Vodja.igramo();
+				}
 		}
 	}
+	
+
 	public static void igramoNovoIgro () {
 		igra = new Igra ();
+		zgodovina = new ArrayList<Igra>();
+		zgodovina.add(new Igra(igra));
 		igramo ();
 	}
 	
@@ -95,24 +118,22 @@ public class Vodja {
 		case V_TEKU:
 			if(!moznost()) igrajPotezo(null);
 			else {
- //te neumne možnosti so narjene mal chonky. Igraj samo če imaš možnost. Če je nimaš bo možnost() zamenjala igralca. 
 				VrstaIgralca vrstaNaVrsti = vrstaIgralca.get(igra.naVrsti);
 				switch(vrstaNaVrsti) {
 				case C:
-					clovekNaPotezi = true;
-					 
+					clovekNaPotezi = true;			 
 					break;
 				case R: racunalnikovaPoteza();
 					break;
-					
 				}
 			}
 		}
-
 	}
-	// sleep scene kokr je naredu profesor
+	// sleep scene kokr je naredu profesor.
+	
 	public static Inteligenca inteligenca = new Inteligenca();
-	public static Minimax minimax = new Minimax(3);
+	public static Minimax minimax7 = new Minimax(5);
+	public static Minimax minimax3 = new Minimax(3);
 	
 	private static void racunalnikovaPoteza() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
@@ -130,7 +151,7 @@ public class Vodja {
 					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				case BEL: 
-					racPoteza = minimax.izberiPotezo(igra);
+					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				}
 				igrajPotezo(racPoteza);
@@ -145,6 +166,7 @@ public class Vodja {
 	public static void igrajPotezo(Poteza poteza) {
 		if(igra.odigraj(poteza)) {
 			//igra.naVrsti = igra.naVrsti.obrat(); // zamenja igralca
+			zgodovina.add(new Igra(igra));
 			clovekNaPotezi = false;
 		}
 		igramo();
@@ -156,6 +178,5 @@ public class Vodja {
 			//System.out.println(igra.naVrsti + "Nimaš možnosti");
 		}
 		return igra.moznost();
-		
 		}
 	}

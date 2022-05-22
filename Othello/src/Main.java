@@ -1,3 +1,4 @@
+import java.awt.GraphicsEnvironment;
 import java.util.EnumMap;
 
 import gui.Okno;
@@ -20,16 +21,8 @@ public class Main {
 		Vodja.okno = okno;
 		Vodja.stanjeZaslona = StanjeZaslona.MENU;
 		
-		//vrsta igralca kot je to storil profesor
-		/*Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+		//for(String fomt : GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) System.out.println(fomt);;
 		
-		// za to bi blo fajn nardit GUI za izbiro različnih opcij
-		Vodja.vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R);
-		Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
-		
-		//poženi da se igra začne
-		Vodja.igramoNovoIgro();*/
-
 	}
 
 }
