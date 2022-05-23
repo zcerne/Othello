@@ -82,6 +82,7 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		}
 		
 		else if(Vodja.stanjeZaslona == StanjeZaslona.IGRA) {
+			
 			this.setBackground(new Color(0, 204, 0));
 			zIgra.width = this.getSize().width;
 			zIgra.height = this.getSize().height;

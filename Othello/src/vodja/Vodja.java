@@ -28,6 +28,7 @@ public class Vodja {
 	
 	public static Okno okno;
 	public static Igra igra;
+	public static boolean koncajIgro = false;
 	public static Map<Igralec,VrstaIgralca> vrstaIgralca;
 	
 	public static ArrayList<Igra> zgodovina;
@@ -84,8 +85,16 @@ public class Vodja {
 				Vodja.igra = new Igra(Vodja.zgodovina.get(ind-di));
 				Vodja.zgodovina.remove(ind);
 				if(di == 2) Vodja.zgodovina.remove(ind-1);
-				Vodja.igramo();
+				igramo();
 				}
+				break;
+		case MENU:
+			stanjeZaslona = StanjeZaslona.MENU;
+			koncajIgro = true;
+			
+			break;
+		default:
+			break;
 		}
 	}
 	
@@ -104,6 +113,10 @@ public class Vodja {
 		//igra.rezultat();
 		okno.repaint();
 		if (okno != null) okno.osveziGUI();
+		if(stanjeZaslona == StanjeZaslona.MENU) {
+			igra = null;
+			return;
+		}
 		
 		switch(igra.stanjeIgre()) {
 		case NEODLOCENO:
@@ -158,7 +171,7 @@ public class Vodja {
 					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				case BEL: 
-					racPoteza = minimax.izberiPotezo(igra);
+					racPoteza = inteligenca.izberiPotezo(igra);
 
 
 					break;

@@ -18,6 +18,7 @@ public class Inteligenca extends KdoIgra{
 		
 		else {
 			int randomIndex = random.nextInt(izbira.size());
+			//System.out.println(randomIndex);
 			return izbira.get(randomIndex);
 		}
 			

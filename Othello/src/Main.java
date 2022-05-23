@@ -13,8 +13,8 @@ import vodja.VrstaIgralca;
 public class Main {
 
 	public static void main(String[] args) {
-		//normalnaIgra();
-		testHitrosti();
+		normalnaIgra();
+		//testHitrosti();
 		
 		
 
@@ -51,7 +51,7 @@ public class Main {
 		//System.out.println("ZAČETEK");
 		long t1 = System.currentTimeMillis();
 		
-		Vodja2.igramoNovoIgro();
+		Vodja2.igramoNovoIgro2();
 		if (Vodja2.igra.rezultat.get(Polje.BEL) < Vodja2.igra.rezultat.get(Polje.CRN)) crni++;
 		else beli++;
 		System.out.println("Crni: " + crni + " : " + "Beli: " + beli);

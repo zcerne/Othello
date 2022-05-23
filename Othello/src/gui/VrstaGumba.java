@@ -1,7 +1,7 @@
 package gui;
 
 public enum VrstaGumba {
-	II, IR, RI, RR, UNDO;
+	II, IR, RI, RR, UNDO, MENU;
 
 	@Override
 	public String toString(){

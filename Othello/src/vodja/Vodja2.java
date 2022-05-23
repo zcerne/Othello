@@ -38,67 +38,15 @@ public class Vodja2 {
 	
 	//požene se na začetku igre.
 	
-	public static void gumb(VrstaGumba gumb) {
-		switch(gumb) {
-		
-		case II:
-			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
-			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
-			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
-			stanjeZaslona = StanjeZaslona.IGRA;
-			igramoNovoIgro();
-			break;
-			
-		case IR :
-			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
-			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
-			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
-			stanjeZaslona = StanjeZaslona.IGRA;
-			igramoNovoIgro();
-			break;
-		
-		case RI :
-			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
-			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
-			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
-			stanjeZaslona = StanjeZaslona.IGRA;
-			igramoNovoIgro();
-			break;
-			
-		
-		case RR : 
-			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
-			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
-			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
-			stanjeZaslona = StanjeZaslona.IGRA;
-			igramoNovoIgro();
-			
-		
-		case UNDO : 
-			int ind = Vodja2.zgodovina.size() - 1;
-			int di = 0;
-				if(Vodja2.vrstaIgralca.get(Igralec.CRN) == VrstaIgralca.R || Vodja2.vrstaIgralca.get(Igralec.BEL) == VrstaIgralca.R) di = 2;
-				else if (Vodja2.vrstaIgralca.get(Igralec.CRN) == VrstaIgralca.C && Vodja2.vrstaIgralca.get(Igralec.BEL) == VrstaIgralca.C) di = 1;
-				
-				if(ind >= di) {
-				Vodja2.igra = new Igra(Vodja2.zgodovina.get(ind-di));
-				Vodja2.zgodovina.remove(ind);
-				if(di == 2) Vodja2.zgodovina.remove(ind-1);
-				Vodja2.igramo();
-				}
-		}
-	}
-	
-
-	public static void igramoNovoIgro () {
+	public static void igramoNovoIgro2 () {
 		igra = new Igra ();
 		zgodovina = new ArrayList<Igra>();
 		zgodovina.add(new Igra(igra));
-		igramo ();
+		igramo2 ();
 	}
 	
 	//preverja kdo ali kaj je na vrsti in ja...
-	public static void igramo() {
+	public static void igramo2() {
 		igra.naPotezi();
 		igra.prestejTocke();
 		//igra.rezultat();
@@ -119,14 +67,14 @@ public class Vodja2 {
 			return;
 		case V_TEKU:
 			
-			if(!moznost()) igrajPotezo(null);
+			if(!moznost2()) igrajPotezo2(null);
 			else {
 				VrstaIgralca vrstaNaVrsti = vrstaIgralca.get(igra.naVrsti);
 				switch(vrstaNaVrsti) {
 				case C:
 					clovekNaPotezi = true;			 
 					break;
-				case R: racunalnikovaPoteza();
+				case R: racunalnikovaPoteza2();
 					
 					break;
 				}
@@ -140,7 +88,7 @@ public class Vodja2 {
 	public static MCTS mcts = new MCTS(2000);
 
 	
-	private static void racunalnikovaPoteza() {
+	private static void racunalnikovaPoteza2() {
 			
 				
 				Poteza racPoteza = null;
@@ -155,23 +103,23 @@ public class Vodja2 {
 
 					break;
 				}
-				igrajPotezo(racPoteza);
+				igrajPotezo2(racPoteza);
 	}
 	
 
 	
 	
 	
-	public static void igrajPotezo(Poteza poteza) {
+	public static void igrajPotezo2(Poteza poteza) {
 		if(igra.odigraj(poteza)) {
 			//igra.naVrsti = igra.naVrsti.obrat(); // zamenja igralca
 			zgodovina.add(new Igra(igra));
 			clovekNaPotezi = false;
 		}
-		igramo();
+		igramo2();
 	}
 
-	public static boolean moznost() {
+	public static boolean moznost2() {
 		if(!igra.moznost()) {
 			//System.out.println(igra.stejMoznosti);
 			//System.out.println(igra.naVrsti + "Nimaš možnosti");

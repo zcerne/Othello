@@ -32,6 +32,8 @@ public class Okno extends JFrame implements ActionListener {
 	private JMenuItem igraRacunalnikRacunalnik;
 	private JMenuItem igraUndo;
 	private JButton undo;
+
+	private JButton menu;
 	//platno ane...
 	public Okno() {
 		super();
@@ -46,14 +48,18 @@ public class Okno extends JFrame implements ActionListener {
 		
 		JMenuBar menu_bar = new JMenuBar();
 		this.setJMenuBar(menu_bar);
-		JMenu igra_menu = new JMenu("Nova igra");
-		menu_bar.add(igra_menu);
+		/*JMenu igra_menu = new JMenu("Nova igra");
+		menu_bar.add(igra_menu);*/
 		
 		undo = new JButton("UNDO");
 		menu_bar.add(undo);
 		undo.addActionListener(this);
 		
-		igraClovekRacunalnik = new JMenuItem("Človek – računalnik");
+		menu = new JButton("MENU");
+		menu_bar.add(menu);
+		menu.addActionListener(this);
+		
+		/*igraClovekRacunalnik = new JMenuItem("Človek – računalnik");
 		igra_menu.add(igraClovekRacunalnik);
 		igraClovekRacunalnik.addActionListener(this);
 		
@@ -67,7 +73,7 @@ public class Okno extends JFrame implements ActionListener {
 		
 		igraRacunalnikRacunalnik = new JMenuItem("Računalnik – računalnik");
 		igra_menu.add(igraRacunalnikRacunalnik);
-		igraRacunalnikRacunalnik.addActionListener(this);
+		igraRacunalnikRacunalnik.addActionListener(this);*/
 		
 		GridBagConstraints polje_layout = new GridBagConstraints();
 		polje_layout.gridx = 0;
@@ -93,7 +99,7 @@ public class Okno extends JFrame implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == igraClovekRacunalnik) {
+		/*if (e.getSource() == igraClovekRacunalnik) {
 			Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			Vodja.vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
 			Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
@@ -117,11 +123,16 @@ public class Okno extends JFrame implements ActionListener {
 			Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
 			Vodja.stanjeZaslona = StanjeZaslona.IGRA;
 			Vodja.igramoNovoIgro();
-		}
+		}*/
 		
-		else if (Vodja.stanjeZaslona == StanjeZaslona.IGRA  && e.getSource() == undo) {
+		if (Vodja.stanjeZaslona == StanjeZaslona.IGRA  && e.getSource() == undo) {
 			Vodja.gumb(VrstaGumba.UNDO);
 		}
+		else if (Vodja.stanjeZaslona == StanjeZaslona.IGRA  && e.getSource() == menu) {
+			Vodja.gumb(VrstaGumba.MENU);
+			osveziGUI();
+		}
+		
 		
 	}
 	
