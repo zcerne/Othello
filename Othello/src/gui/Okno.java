@@ -48,6 +48,7 @@ public class Okno extends JFrame implements ActionListener {
 		
 		JMenuBar menu_bar = new JMenuBar();
 		this.setJMenuBar(menu_bar);
+		
 		/*JMenu igra_menu = new JMenu("Nova igra");
 		menu_bar.add(igra_menu);*/
 		
