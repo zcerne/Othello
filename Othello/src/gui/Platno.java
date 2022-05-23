@@ -90,39 +90,13 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		
 		switch(Vodja.stanjeZaslona) {
 		case MENU : 
-			for(Gumb g : zMenu.gumbi) {
-				if(g.klik(moseX, moseY)) {
-					Vodja.gumb(g.ime);
-				}
-			}
+			zMenu.klik(moseX, moseY);
 			
 			break;
 			
 		case IGRA :
+			zIgra.klik(moseX, moseY);
 
-			int a = zIgra.kvadratek();
-			
-			for(Gumb g : zIgra.gumbi) {
-				if(g.klik(moseX, moseY)) {
-					Vodja.gumb(g.ime);	
-				}
-			};
-			//za vsako polje preveri ali smo kliknili nanj in potem kliče izvediPotezo, 
-			if(Vodja.clovekNaPotezi) {
-				for (int i = 0; i < 8; i++) {
-					for (int j = 0; j < 8; j++) {
-						if ((i*a <= moseX && moseX < i*a+a) && (j*a <= moseY && moseY < j*a + a)) {
-							//System.out.println("Pred iskanjem");
-							Poteza poteza = new Poteza(i,j);
-							
-							
-							Vodja.igrajPotezo(poteza);
-						}
-	
-					}
-				}
-			}
-			
 			break;
 		}
 	}
