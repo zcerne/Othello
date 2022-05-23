@@ -133,13 +133,9 @@ public class Vodja {
 	// sleep scene kokr je naredu profesor.
 	
 	public static Inteligenca inteligenca = new Inteligenca();
-<<<<<<< HEAD
 	public static Minimax minimax = new Minimax(3);
 	public static MCTS mcts = new MCTS(5000);
-=======
-	public static Minimax minimax7 = new Minimax(5);
-	public static Minimax minimax3 = new Minimax(3);
->>>>>>> refs/heads/Bolj_Fency_GUI
+
 	
 	private static void racunalnikovaPoteza() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
@@ -157,11 +153,10 @@ public class Vodja {
 					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				case BEL: 
-<<<<<<< HEAD
+
 					racPoteza = mcts.izberiPotezo(igra);
-=======
-					racPoteza = inteligenca.izberiPotezo(igra);
->>>>>>> refs/heads/Bolj_Fency_GUI
+
+
 					break;
 				}
 				igrajPotezo(racPoteza);
