@@ -14,6 +14,7 @@ import logika.Igralec;
 import logika.Polje;
 import splosno.Poteza;
 import inteligenca.Inteligenca;
+import inteligenca.MCTS;
 import inteligenca.Minimax;
 
 public class Vodja {
@@ -72,6 +73,7 @@ public class Vodja {
 	// sleep scene kokr je naredu profesor
 	public static Inteligenca inteligenca = new Inteligenca();
 	public static Minimax minimax = new Minimax(3);
+	public static MCTS mcts = new MCTS(5000);
 	
 	private static void racunalnikovaPoteza() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
@@ -89,7 +91,7 @@ public class Vodja {
 					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				case BEL: 
-					racPoteza = minimax.izberiPotezo(igra);
+					racPoteza = mcts.izberiPotezo(igra);
 					break;
 				}
 				igrajPotezo(racPoteza);

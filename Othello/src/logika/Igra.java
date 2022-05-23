@@ -55,7 +55,7 @@ public class Igra {
 		this.rezultat = igra.rezultat;
 		this.naVrsti = igra.naVrsti;
 	}
-	
+	// Igra nova = Igra(stara)
 	public boolean odigraj(Poteza poteza) {
 		if(poteza != null) {
 			ArrayList<Poteza> dobljeniZetoni = izvediPotezo(poteza);
@@ -152,6 +152,10 @@ public class Igra {
 		
 		return volni;
 	}
+	
+	
+	
+	
 	
 	public void prestejTocke() {
 		int crni = 0;

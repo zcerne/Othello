@@ -22,7 +22,7 @@ public class Main {
 		
 		// za to bi blo fajn nardit GUI za izbiro različnih opcij
 		Vodja.vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R);
-		Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
+		Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
 		
 		//poženi da se igra začne
 		Vodja.igramoNovoIgro();

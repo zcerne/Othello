@@ -1,60 +1,131 @@
 package inteligenca;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import logika.Igra;
 import logika.Igralec;
+import logika.Stanje;
 import splosno.Poteza;
 
 
 public class MCTS extends Inteligenca {
 	
-	private int obseg;
-	Map drevo;
+	private static Random random = new Random ();
 	
-	public MCTS (int globina, int obseg) {
+	private int obseg, count;
+	
+	
+	public MCTS (int obseg) {
 		this.obseg = obseg;
-	
-		this.drevo = new HashMap<ArrayList <Poteza>, Veja>();
 	}
 	
+	
+
 	@Override
 	public Poteza izberiPotezo (Igra igra) {
-		OcenjenaPoteza najboljsaPoteza = monte_carlo_tree_search(igra, this.obseg, igra.naVrsti);
-		return najboljsaPoteza.poteza;	
+		this.count = 0;
+		Poteza najboljsaPoteza = monte_carlo_tree_search(igra, this.obseg, igra.naVrsti);
+		return najboljsaPoteza;	
 	}
 	
-	public monte_carlo_tree_search(Igra igra, int globina, Igralec jaz) {
-	    while (obseg > 0) {
-//	        leaf = traverse(root) # leaf = unvisited node 
-//	        simulation_result = rollout(leaf)
-//	        backpropagate(leaf, simulation_result)
-//	    return best_child(root)
-	    }
-//
-//	public traverse(node){
-//	    while fully_expanded(node):
-//	        node = best_uct(node)
-//	    return pick_univisted(node.children) or node # in case no children are present / node is terminal 
-// }
-//	def rollout(node):
-//	    while non_terminal(node):
-//	        node = rollout_policy(node)
-//	    return result(node) 
-//
-//	def rollout_policy(node):
-//	    return pick_random(node.children)
-//
-//	def backpropagate(node, result):
-//	   if is_root(node) return 
-//	   node.stats = update_stats(node, result) 
-//	   backpropagate(node.parent)
-//
-//	def best_child(node):
-//	    pick child with highest number of visits
-	}
+	public Poteza monte_carlo_tree_search(Igra igra, int globina, Igralec jaz) {
+		Veja root = new Veja(igra, 0 , 0, null);
+		while (count < obseg) {
+			//System.out.println(0);
+	        Veja list = izberivejo(root);
+	        //System.out.println(1);
+	        Stanje rezultat = simulacija(list);
+	        //System.out.println(2);
+	        backpropagate(list, rezultat);
+	        //System.out.println(3);
+	        count++;}
+	    Veja node = best_child(root);
+	    System.out.println(node.getPoteza());
+	    return node.getPoteza();
+	    
 
-	public boolean popolnoma_raziskano(List){
+	}
+	    
+	public Veja izberivejo(Veja node){
+//		System.out.println(node.otroci.size());
+//		
+//		System.out.println(node.fullyexpanded());
+	    while (node.fullyexpanded()) {
+	        node = UCT.findBestNodeWithUCT(node);
+	    }
+	    return pick_univisted(node); // in case no children are present / node is terminal 
+ }
+	public Veja pick_univisted(Veja node) {
+		if (!node.isterminal() && node.otroci.size() == 0) { 
+			node.makebaby();
+			//System.out.println("ali se razsiri" + node.otroci.size());
+			return node.otroci.get(0);
+			
+		}
+    	else {
+    		for (Veja sin : node.otroci) {
+        		if (sin.visits == 0) return sin;
+        		//imam pripombe, bo žiga razmislil
+        		// ga bom prepričal
+        	
+        	}
+    	return node;
+    	
+		/*
+		 * System.out.println("Neki je zelo narobe"); return null;
+		 */
+    	}
+	}
+	    
+	
+	public Stanje simulacija(Veja node) {
+		
+	
+		Igra odigraj = new Igra(node.getIgra());
+		
+		//System.out.println(odigraj.stanjeIgre());
+		while (odigraj.stanjeIgre() == Stanje.V_TEKU) {
+			ArrayList<Poteza> na_voljo = odigraj.dovoljenePoteze();
+//			System.out.println("Dovoljene potezeee " + na_voljo.size());
+			int dolzina = na_voljo.size();
+			Poteza poteza = null;
+			if(dolzina != 0) {
+				int randomIndex = random.nextInt(dolzina);
+				poteza = na_voljo.get(randomIndex);
+			}
+			
+			odigraj.odigraj(poteza);
+			}
+		return odigraj.stanjeIgre();
+		}
+	
+	
+	public void backpropagate(Veja node, Stanje stanje) {
+		while (node.tata != null) {
+			if (node.igra.naVrsti == Igralec.CRN && stanje == Stanje.ZMAGA_CRN) node.wins++;
+			else if (node.igra.naVrsti == Igralec.BEL && stanje == Stanje.ZMAGA_BEL) node.wins++;
+			else if (stanje == Stanje.NEODLOCENO) node.wins += 0.5;
+			node.visits++;
+			node = node.tata;
+			
+		}
+		if (node.igra.naVrsti == Igralec.CRN && stanje == Stanje.ZMAGA_CRN) node.wins++;
+		else if (node.igra.naVrsti == Igralec.BEL && stanje == Stanje.ZMAGA_BEL) node.wins++;
+		else if (stanje == Stanje.NEODLOCENO) node.wins += 0.5;
+		node.visits++;
+	}
+	
+	public Veja best_child(Veja root) {
+		//System.out.println("velikost otrok pred izbiro" + root.otroci.size());
+	
+		 return Collections.max(
+		          root.otroci,
+		          Comparator.comparing(c -> c.visits));
+		    }
+	}
+	
