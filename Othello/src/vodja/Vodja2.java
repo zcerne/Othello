@@ -22,7 +22,7 @@ import inteligenca.MCTS;
 import inteligenca.Minimax;
 
 
-public class Vodja {
+public class Vodja2 {
 
 	VrstaIgralca naVrsti;
 	
@@ -75,16 +75,16 @@ public class Vodja {
 			
 		
 		case UNDO : 
-			int ind = Vodja.zgodovina.size() - 1;
+			int ind = Vodja2.zgodovina.size() - 1;
 			int di = 0;
-				if(Vodja.vrstaIgralca.get(Igralec.CRN) == VrstaIgralca.R || Vodja.vrstaIgralca.get(Igralec.BEL) == VrstaIgralca.R) di = 2;
-				else if (Vodja.vrstaIgralca.get(Igralec.CRN) == VrstaIgralca.C && Vodja.vrstaIgralca.get(Igralec.BEL) == VrstaIgralca.C) di = 1;
+				if(Vodja2.vrstaIgralca.get(Igralec.CRN) == VrstaIgralca.R || Vodja2.vrstaIgralca.get(Igralec.BEL) == VrstaIgralca.R) di = 2;
+				else if (Vodja2.vrstaIgralca.get(Igralec.CRN) == VrstaIgralca.C && Vodja2.vrstaIgralca.get(Igralec.BEL) == VrstaIgralca.C) di = 1;
 				
 				if(ind >= di) {
-				Vodja.igra = new Igra(Vodja.zgodovina.get(ind-di));
-				Vodja.zgodovina.remove(ind);
-				if(di == 2) Vodja.zgodovina.remove(ind-1);
-				Vodja.igramo();
+				Vodja2.igra = new Igra(Vodja2.zgodovina.get(ind-di));
+				Vodja2.zgodovina.remove(ind);
+				if(di == 2) Vodja2.zgodovina.remove(ind-1);
+				Vodja2.igramo();
 				}
 		}
 	}
@@ -102,19 +102,19 @@ public class Vodja {
 		igra.naPotezi();
 		igra.prestejTocke();
 		//igra.rezultat();
-		okno.repaint();
+		//okno.repaint();
 		if (okno != null) okno.osveziGUI();
 		
 		switch(igra.stanjeIgre()) {
 		case NEODLOCENO:
-			System.out.println("NEODLOČENO");
+			//System.out.println("NEODLOČENO");
 			return;
 		case ZMAGA_BEL:
-			System.out.println("BELI ZMAGA");
+			//System.out.println("BELI ZMAGA");
 			//igra.rezultat();
 			return;
 		case ZMAGA_CRN:
-			System.out.println("ČRNI ZMAGA");
+			//System.out.println("ČRNI ZMAGA");
 			//igra.rezultat();
 			return;
 		case V_TEKU:
@@ -136,20 +136,12 @@ public class Vodja {
 	// sleep scene kokr je naredu profesor.
 	
 	public static Inteligenca inteligenca = new Inteligenca();
-	public static Minimax minimax = new Minimax(7);
-	public static MCTS mcts = new MCTS(5000);
+	public static Minimax minimax = new Minimax(5);
+	public static MCTS mcts = new MCTS(2000);
 
 	
 	private static void racunalnikovaPoteza() {
-		
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
-			@Override
-			protected Void doInBackground() {
-				try {TimeUnit.MILLISECONDS.sleep(1);} catch (Exception e) {};	
-				return null;
-			}
-			@Override
-			protected void done () {
+			
 				
 				Poteza racPoteza = null;
 				
@@ -158,18 +150,16 @@ public class Vodja {
 					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				case BEL: 
-					racPoteza = minimax.izberiPotezo(igra);
+					racPoteza = mcts.izberiPotezo(igra);
 
 
 					break;
 				}
 				igrajPotezo(racPoteza);
-				
-				}
-
-		};
-		worker.execute();
 	}
+	
+
+	
 	
 	
 	public static void igrajPotezo(Poteza poteza) {
