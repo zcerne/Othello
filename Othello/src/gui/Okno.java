@@ -139,14 +139,14 @@ public class Okno extends JFrame implements ActionListener {
 	
 	public void osveziGUI() {
 		if (Vodja.igra == null) {
-			status.setText("Igra ni v teku.");
+			status.setText("Izberi igro.");
 		}
 		else {
 			switch(Vodja.igra.stanjeIgre()) {
 			case NEODLOCENO: status.setText("Neodločeno!"); break;
 			case V_TEKU: 
-				/*status.setText(Vodja.igra.naVrsti + 
-						" - " + Vodja.vrstaIgralca.get(Vodja.igra.naVrsti) + " : " + Vodja.igra.rezultat());*/ 
+				status.setText(Vodja.igra.naVrsti + 
+						" - " + Vodja.vrstaIgralca.get(Vodja.igra.naVrsti) + " : " + Vodja.igra.rezultat());
 				
 				break;
 			case ZMAGA_CRN: 

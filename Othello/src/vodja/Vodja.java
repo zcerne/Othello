@@ -28,7 +28,6 @@ public class Vodja {
 	
 	public static Okno okno;
 	public static Igra igra;
-	public static boolean koncajIgro = false;
 	public static Map<Igralec,VrstaIgralca> vrstaIgralca;
 	
 	public static ArrayList<Igra> zgodovina;
@@ -90,7 +89,6 @@ public class Vodja {
 				break;
 		case MENU:
 			stanjeZaslona = StanjeZaslona.MENU;
-			koncajIgro = true;
 			
 			break;
 		default:
@@ -115,6 +113,7 @@ public class Vodja {
 		if (okno != null) okno.osveziGUI();
 		if(stanjeZaslona == StanjeZaslona.MENU) {
 			igra = null;
+			okno.osveziGUI();
 			return;
 		}
 		
