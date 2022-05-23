@@ -11,7 +11,14 @@ import vodja.VrstaIgralca;
 public class Main {
 
 	public static void main(String[] args) {
+		normalnaIgra();
 		
+		
+
+		
+	}
+	
+	public static void normalnaIgra() {
 		Okno okno = new Okno();
 		
 		//da se scene vidjo
@@ -20,8 +27,10 @@ public class Main {
 		
 		Vodja.okno = okno;
 		Vodja.stanjeZaslona = StanjeZaslona.MENU;
+	}
+	
+	public void testHitrosti() {
 		
-
 		
 	}
 

@@ -107,11 +107,11 @@ public class Vodja {
 		
 		switch(igra.stanjeIgre()) {
 		case NEODLOCENO:
-			System.out.println("NEODLOČENO");
+			//System.out.println("NEODLOČENO");
 			return;
 		case ZMAGA_BEL:
-			System.out.println("BELI ZMAGA");
-			igra.rezultat();
+			//System.out.println("BELI ZMAGA");
+			//igra.rezultat();
 			return;
 		case ZMAGA_CRN:
 			System.out.println("ČRNI ZMAGA");
@@ -154,7 +154,7 @@ public class Vodja {
 					break;
 				case BEL: 
 
-					racPoteza = mcts.izberiPotezo(igra);
+					racPoteza = inteligenca.izberiPotezo(igra);
 
 
 					break;

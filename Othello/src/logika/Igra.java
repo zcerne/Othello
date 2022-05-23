@@ -174,7 +174,7 @@ public class Igra {
 	
 	public String rezultat() {
 		System.out.println("CRNI: " + rezultat.get(Polje.CRN) + "  BELI: " + rezultat.get(Polje.BEL));
-		return "CRNI: " + rezultat.get(Polje.CRN) + "       BELI: " + rezultat.get(Polje.BEL);
+		return  "CRNI: " + rezultat.get(Polje.CRN) + "       BELI: " + rezultat.get(Polje.BEL);
 		
 	}
 	

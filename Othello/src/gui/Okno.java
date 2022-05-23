@@ -133,8 +133,8 @@ public class Okno extends JFrame implements ActionListener {
 			switch(Vodja.igra.stanjeIgre()) {
 			case NEODLOCENO: status.setText("Neodločeno!"); break;
 			case V_TEKU: 
-				status.setText(Vodja.igra.naVrsti + 
-						" - " + Vodja.vrstaIgralca.get(Vodja.igra.naVrsti) + " : " + Vodja.igra.rezultat()); 
+				/*status.setText(Vodja.igra.naVrsti + 
+						" - " + Vodja.vrstaIgralca.get(Vodja.igra.naVrsti) + " : " + Vodja.igra.rezultat());*/ 
 				
 				break;
 			case ZMAGA_CRN: 
