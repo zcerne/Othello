@@ -45,7 +45,7 @@ public class MCTS extends Inteligenca {
 	        //System.out.println(3);
 	        count++;}
 	    Veja node = best_child(root);
-	    System.out.println(node.getPoteza());
+	    //System.out.println(node.getPoteza());
 	    return node.getPoteza();
 	    
 

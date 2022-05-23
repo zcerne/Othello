@@ -152,11 +152,6 @@ public class Igra {
 		
 		return volni;
 	}
-	
-	
-	
-	
-	
 	public void prestejTocke() {
 		int crni = 0;
 		int beli = 0;
@@ -193,8 +188,6 @@ public class Igra {
 	//vrne stanje igre. Očitno je mogoče da se celotna plošča sploh ne zapolni. Zato tok komplikacij. Za primer če noben nima možnosti sem "preprosto" (lol) vpelajl counter nemožnosti.
 	public Stanje stanjeIgre() {		
 		if(rezultat.get(Polje.BEL) + rezultat.get(Polje.CRN) == N*N || stejMoznosti >= 2) {
-			
-			if(stejMoznosti >= 2)System.out.println("Noben nima možnosti");
 			
 			if(rezultat.get(Polje.CRN) < rezultat.get(Polje.BEL)) return Stanje.ZMAGA_BEL;
 			else if (rezultat.get(Polje.CRN) > rezultat.get(Polje.BEL)) return Stanje.ZMAGA_CRN;
