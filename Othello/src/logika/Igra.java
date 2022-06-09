@@ -17,6 +17,7 @@ public class Igra {
 	public static int N;
 	public int stejMoznosti;
 	
+	public Stanje stanjeIgre;
 	public Map<Polje, Integer> rezultat;
 	
 	public Igra() {
@@ -33,14 +34,28 @@ public class Igra {
 		polja[N/2-1][N/2] = Polje.BEL;
 		polja[N/2][N/2-1] = Polje.BEL;
 		polja[N/2][N/2] = Polje.CRN;
+		polja[N/2][N/2] = Polje.CRN;
 		
-		naVrsti = Igralec.CRN;
+		/*polja[0][0] = Polje.CRN;
+		polja[0][1] = Polje.BEL;
+		polja[1][0] = Polje.BEL;
+		polja[1][1] = Polje.CRN;
+		//polja[1][2] = Polje.BEL;
+		polja[2][1] = Polje.BEL;
+		//polja[2][2] = Polje.CRN;
+		//polja[2][0] = Polje.CRN;
+		//polja[0][2] = Polje.CRN;*/
+
+		
+		naVrsti = Igralec.BEL;
 		
 		stejMoznosti = 0;
 		
 		rezultat = new EnumMap<Polje, Integer>(Polje.class);
 		rezultat.put(Polje.CRN, 2);
 		rezultat.put(Polje.BEL, 2);
+		
+		stanjeIgre = Stanje.V_TEKU;
 		
 	}
 	
@@ -51,13 +66,12 @@ public class Igra {
 				this.polja[i][j] = igra.polja[i][j];
 			}
 		}
-		
+		stejMoznosti = igra.stejMoznosti;
 		this.rezultat = igra.rezultat;
 		this.naVrsti = igra.naVrsti;
 	}
 	// Igra nova = Igra(stara)
 	public boolean odigraj(Poteza poteza) {
-		if(poteza != null) {
 			ArrayList<Poteza> dobljeniZetoni = izvediPotezo(poteza);
 			if(dobljeniZetoni.size() != 0) {
 				int i = poteza.getX();
@@ -69,16 +83,31 @@ public class Igra {
 					polja[x][y] = naVrsti.dobiPolje(); //in jih nato obrne 
 				}
 				naVrsti = naVrsti.obrat();
-				stejMoznosti = 0;
+				moznePoteze();
+				stanjeIgre = stanjeIgre();
 				return true;
 			}
-			else return false;
+			
+			else {
+				return false;
 		}
-		else {
+		
+	}
+	
+	private void moznePoteze() {
+		
+		if(dovoljenePoteze().size() == 0) {
 			stejMoznosti +=1;
 			naVrsti = naVrsti.obrat();
-			return true;
+			if(dovoljenePoteze().size() == 0) {
+				stejMoznosti +=1;
+				naVrsti = naVrsti.obrat();
+			}
+			
+			
 		}
+		else stejMoznosti = 0;
+		
 	}
 	
 	public boolean lahkoOdigram(Poteza poteza) {
@@ -90,8 +119,8 @@ public class Igra {
 		
 		return false;
 	}
+	
 	public void naPotezi() {
-		//System.out.println(naVrsti); 
 	}
 	
 	public ArrayList<Poteza> izvediPotezo(Poteza poteza) {
@@ -101,7 +130,6 @@ public class Igra {
 		
 		
 		if (polja[ii][jj] == Polje.PRAZNO) {
-			//System.out.println("Glavni loop");
 			int[][] smeri = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1,1}, {-1,1}, {1,-1}, {-1,-1}}; // vse smeri pregleda
 			
 			for(int[] smer : smeri) { //ppregled v vseh smereh
@@ -109,7 +137,6 @@ public class Igra {
 				int smerY = smer[1];
 				int premik = 1;
 				ArrayList<Poteza> izbraniVSmeri = new ArrayList<>(); // seznam vseh dobljenih krogcev/točk... v tej smeri
-				//System.out.println("smer" + smerX + "  " + smerY);
 				while (ii + premik*smerX >= 0 && ii + premik*smerX < N && jj + premik*smerY >= 0 && jj + premik*smerY < N){
 					// ustvarim koordinato
 					Poteza izb = new Poteza(ii + premik*smerX, jj + premik*smerY); 
@@ -152,6 +179,7 @@ public class Igra {
 		
 		return volni;
 	}
+	
 	public void prestejTocke() {
 		int crni = 0;
 		int beli = 0;
@@ -173,7 +201,7 @@ public class Igra {
 	}
 	
 	public String rezultat() {
-		System.out.println("CRNI: " + rezultat.get(Polje.CRN) + "  BELI: " + rezultat.get(Polje.BEL));
+		//System.out.println("CRNI: " + rezultat.get(Polje.CRN) + "  BELI: " + rezultat.get(Polje.BEL));
 		return  "CRNI: " + rezultat.get(Polje.CRN) + "       BELI: " + rezultat.get(Polje.BEL);
 		
 	}
@@ -183,7 +211,7 @@ public class Igra {
 		if(poteze.size() == 0) { // če pač ni možnosti ni možnosti in spet zamenja igralca
 			return false;
 		}
-		return true;	
+		return true;
 	}
 	
 	//vrne stanje igre. Očitno je mogoče da se celotna plošča sploh ne zapolni. Zato tok komplikacij. Za primer če noben nima možnosti sem "preprosto" (lol) vpelajl counter nemožnosti.

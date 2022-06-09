@@ -5,6 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.EnumMap;
 
 import javax.swing.JButton;
@@ -21,9 +23,11 @@ import vodja.Vodja;
 import vodja.VrstaIgralca;
 
 @SuppressWarnings("serial")
-public class Okno extends JFrame implements ActionListener {
+public class Okno extends JFrame implements ActionListener, MouseListener {
 	
 	private Platno platno;
+	public PlatnoMenu platnoMenu;
+	public PlatnoIgra platnoIgra;
 	
 	private JLabel status;
 	private JMenuItem igraClovekRacunalnik;
@@ -41,9 +45,18 @@ public class Okno extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("Othello");
 		this.setLayout(new GridBagLayout());
+		/*this.addMouseListener(this);
+		this.setFocusable(true);*/
+		
+		
 		//ustvari novo platno
 		platno = new Platno();
+		//platnoMenu = new PlatnoMenu(600,600);
+		//platnoIgra = new PlatnoIgra(600,600);
+		//platnoIgra.setVisible(false);
 		this.add(platno);
+		//this.add(platnoIgra);
+		//this.add(platnoMenu);
 		//Vodja.igra = new Igra();
 		
 		JMenuBar menu_bar = new JMenuBar();
@@ -158,6 +171,45 @@ public class Okno extends JFrame implements ActionListener {
 			}
 		}
 		platno.repaint();
+		
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+		int moseX = e.getX();
+		int moseY = e.getY();
+		switch(Vodja.stanjeZaslona) {
+		case MENU : 
+			platnoMenu.klik(moseX, moseY);
+			
+			break;
+			
+		case IGRA :
+			platnoIgra.klik(moseX, moseY);
+
+			break;
+		}
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 		
 }

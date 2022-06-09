@@ -42,6 +42,9 @@ public class Vodja {
 		switch(gumb) {
 		
 		case II:
+			
+			//okno.platnoMenu.setVisible(false);
+			//okno.platnoIgra.setVisible(true);
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
@@ -50,6 +53,8 @@ public class Vodja {
 			break;
 			
 		case IR :
+			//okno.platnoMenu.setVisible(false);
+			//okno.platnoIgra.setVisible(true);
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
@@ -58,6 +63,8 @@ public class Vodja {
 			break;
 		
 		case RI :
+			//okno.platnoMenu.setVisible(false);
+			//okno.platnoIgra.setVisible(true);
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
@@ -66,13 +73,14 @@ public class Vodja {
 			break;
 			
 		
-		case RR : 
+		case RR :
+			//okno.platnoMenu.setVisible(false);
+			//okno.platnoIgra.setVisible(true);
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
 			stanjeZaslona = StanjeZaslona.IGRA;
-			igramoNovoIgro();
-			
+			igramoNovoIgro();		
 		
 		case UNDO : 
 			int ind = Vodja.zgodovina.size() - 1;
@@ -117,7 +125,7 @@ public class Vodja {
 			return;
 		}
 		
-		switch(igra.stanjeIgre()) {
+		switch(igra.stanjeIgre) {
 		case NEODLOCENO:
 			System.out.println("NEODLOČENO");
 			return;
@@ -131,8 +139,6 @@ public class Vodja {
 			return;
 		case V_TEKU:
 			
-			if(!moznost()) igrajPotezo(null);
-			else {
 				VrstaIgralca vrstaNaVrsti = vrstaIgralca.get(igra.naVrsti);
 				switch(vrstaNaVrsti) {
 				case C:
@@ -141,15 +147,15 @@ public class Vodja {
 				case R: racunalnikovaPoteza();
 					
 					break;
-				}
+				
 			}
 		}
 	}
 	// sleep scene kokr je naredu profesor.
 	
 	public static Inteligenca inteligenca = new Inteligenca();
-	public static Minimax minimax = new Minimax(7);
-	public static MCTS mcts = new MCTS(5000);
+	public static Minimax minimax = new Minimax(1);
+	public static MCTS mcts = new MCTS(2000);
 
 	
 	private static void racunalnikovaPoteza() {
@@ -167,7 +173,7 @@ public class Vodja {
 				
 				switch(igra.naVrsti) {
 				case CRN: 
-					racPoteza = inteligenca.izberiPotezo(igra);
+					racPoteza = mcts.izberiPotezo(igra);
 					break;
 				case BEL: 
 					racPoteza = inteligenca.izberiPotezo(igra);

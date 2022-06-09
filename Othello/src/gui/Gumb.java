@@ -28,8 +28,7 @@ public class Gumb {
 		}
 		return false;
 	}
-	
-	
+
 	public void narisi(Graphics2D g) {
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, (int)Math.round(0.68*b)));

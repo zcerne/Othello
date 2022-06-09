@@ -4,21 +4,23 @@ import java.util.ArrayList;
 
 import logika.Igra;
 import logika.Igralec;
+import logika.Stanje;
 import splosno.Poteza;
 
 public class Veja {
 	
 	public Igra igra;
-	public double wins;
+	public double wins, porazi;
 	public int visits;
 	public Veja tata;
 	public ArrayList<Veja> otroci;
 	public Poteza poteza = null;
 
-	public Veja(Igra igra, int visits, double wins, Veja stars) {
+	public Veja(Igra igra, int visits, double wins, double porazi, Veja stars) {
 		this.igra = igra;
 		this.visits = visits;
 		this.wins = wins;
+		this.porazi = porazi;
 		this.tata = stars;
 		this.otroci = new ArrayList<Veja>();
 		
@@ -28,7 +30,7 @@ public class Veja {
 		for (Poteza p : igra.dovoljenePoteze()) {
 			Igra od_p = new Igra(igra);
 			od_p.izvediPotezo(p);
-			Veja baby = new Veja(od_p, 0 ,0, this);
+			Veja baby = new Veja(od_p, 0 ,0,0, this);
 			baby.poteza = p;
 			this.otroci.add(baby);
 		}
@@ -39,26 +41,20 @@ public class Veja {
     }
     
     public boolean isterminal() {
-    	if (igra.dovoljenePoteze() == null) return true;
+    	if (igra.dovoljenePoteze().size() == 0) return true;
     	else return false;
     }
     
     public boolean fullyexpanded() {
     	
-    	
-    
     	if (this.otroci.size() == 0) return false;
-    	else {
+    	else if(this.otroci.size() != 0) {
     		for (Veja sin : this.otroci) {
         		if (sin.visits == 0) return false;
-        		//imam pripombe, bo žiga razmislil
-        		// ga bom prepričal
-        	
-        	}
-        	return true;
+    			}
     	}
     	
-    	
+    	return true;
     }
     
     void setIgra(Igra Igra) {

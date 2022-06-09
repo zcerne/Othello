@@ -18,7 +18,7 @@ public class MCTS extends Inteligenca {
 	private static Random random = new Random ();
 	
 	private int obseg, count;
-	
+	Igralec jaz;
 	
 	public MCTS (int obseg) {
 		this.obseg = obseg;
@@ -34,20 +34,24 @@ public class MCTS extends Inteligenca {
 	}
 	
 	public Poteza monte_carlo_tree_search(Igra igra, int globina, Igralec jaz) {
-		Veja root = new Veja(igra, 0 , 0, null);
+		this.jaz = jaz;
+		Veja root = new Veja(igra, 0 , 0,0, null);
 		while (count < obseg) {
 			//System.out.println(0);
-	        Veja list = izberivejo(root);
+
+			Veja list = izberivejo(root);
+	        
 	        //System.out.println(1);
 	        Stanje rezultat = simulacija(list);
+	        //System.out.println(rezultat);
 	        //System.out.println(2);
 	        backpropagate(list, rezultat);
 	        //System.out.println(3);
 	        count++;}
 	    Veja node = best_child(root);
-	    //System.out.println(node.getPoteza());
+	    System.out.println("zmage: " + node.wins);
+	    System.out.println("porazi: " + node.porazi);
 	    return node.getPoteza();
-	    
 
 	}
 	    
@@ -55,16 +59,21 @@ public class MCTS extends Inteligenca {
 //		System.out.println(node.otroci.size());
 //		
 //		System.out.println(node.fullyexpanded());
-	    while (node.fullyexpanded()) {
-	        node = UCT.findBestNodeWithUCT(node);
+
+	    while (node.fullyexpanded()){
+	    	node = UCT.findBestNodeWithUCT(node);
 	    }
-	    return pick_univisted(node); // in case no children are present / node is terminal 
+	    
+	    return pick_univisted(node); // in case no children are present / node is terminal
  }
 	public Veja pick_univisted(Veja node) {
-		if (!node.isterminal() && node.otroci.size() == 0) { 
+		if (!node.isterminal() && node.otroci.size() == 0) {
 			node.makebaby();
 			//System.out.println("ali se razsiri" + node.otroci.size());
-			return node.otroci.get(0);
+			return node.otroci.get(0);	
+		}
+		else if(node.isterminal()){
+			return node; 
 			
 		}
     	else {
@@ -72,7 +81,6 @@ public class MCTS extends Inteligenca {
         		if (sin.visits == 0) return sin;
         		//imam pripombe, bo žiga razmislil
         		// ga bom prepričal
-        	
         	}
     	return node;
     	
@@ -98,34 +106,64 @@ public class MCTS extends Inteligenca {
 				int randomIndex = random.nextInt(dolzina);
 				poteza = na_voljo.get(randomIndex);
 			}
+			else if(dolzina == 0)System.out.println("PROBLEM V MCTS 102!!!!");
 			
 			odigraj.odigraj(poteza);
 			}
+		//System.out.println(odigraj.stanjeIgre());
 		return odigraj.stanjeIgre();
 		}
 	
 	
 	public void backpropagate(Veja node, Stanje stanje) {
 		while (node.tata != null) {
-			if (node.igra.naVrsti == Igralec.CRN && stanje == Stanje.ZMAGA_CRN) node.wins++;
-			else if (node.igra.naVrsti == Igralec.BEL && stanje == Stanje.ZMAGA_BEL) node.wins++;
+			
+			if (node.igra.naVrsti == jaz){
+				if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.CRN) node.wins++;
+				else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.BEL) node.wins++;
+				else if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.porazi++;
+				else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.porazi++;
+				
+			}
 			else if (stanje == Stanje.NEODLOCENO) node.wins += 0.5;
 			node.visits++;
 			node = node.tata;
 			
+		}	
+		if (node.tata == null) {
+			if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.wins++;
+			else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.wins++;
+			else if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.porazi++;
+			else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.porazi++;
 		}
-		if (node.igra.naVrsti == Igralec.CRN && stanje == Stanje.ZMAGA_CRN) node.wins++;
-		else if (node.igra.naVrsti == Igralec.BEL && stanje == Stanje.ZMAGA_BEL) node.wins++;
 		else if (stanje == Stanje.NEODLOCENO) node.wins += 0.5;
-		node.visits++;
+			node.visits++;
+			
 	}
 	
 	public Veja best_child(Veja root) {
 		//System.out.println("velikost otrok pred izbiro" + root.otroci.size());
-	
-		 return Collections.max(
+		
+		 /*return Collections.max(
 		          root.otroci,
-		          Comparator.comparing(c -> c.visits));
-		    }
+		          Comparator.comparing(c -> c.wins));
+		    }*/
+		Veja najjaci = null;
+		int obiski = 0;
+		for (Veja v : root.otroci) {
+			if (v.visits >= obiski) {
+				najjaci = v;
+				obiski = v.visits;
+			}
+		}
+		return najjaci;
 	}
+}
 	
+	
+	
+	
+	
+	
+	
+

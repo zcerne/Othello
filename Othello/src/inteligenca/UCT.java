@@ -15,8 +15,21 @@ public class UCT {
 
     static Veja findBestNodeWithUCT(Veja node) {
         int parentVisit = node.visits;
-        return Collections.max(
+       /*return Collections.max(
           node.otroci,
-          Comparator.comparing(c -> uctValue(parentVisit, (c.visits - c.wins), c.visits)));
+          Comparator.comparing(c -> uctValue(parentVisit, c.wins, c.visits)));*/
+        double najbolsiScore = 0;
+        Veja najjacaVeja = node;
+        for(Veja v : node.otroci) {
+        	
+        	double uctV = uctValue(parentVisit, v.wins, v.visits);
+        	if(najbolsiScore <= uctV) {
+        		najbolsiScore = uctV;
+        		najjacaVeja = v;
+        	}
+        }
+        
+        return najjacaVeja;
     }
+    
 }

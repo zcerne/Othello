@@ -15,10 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		normalnaIgra();
 		//testHitrosti();
-		
-		
 
-		
 	}
 	
 	
@@ -48,19 +45,20 @@ public class Main {
 		while (i < 300) {
 
 		
-		//System.out.println("ZAČETEK");
-		long t1 = System.currentTimeMillis();
-		
-		Vodja2.igramoNovoIgro2();
-		if (Vodja2.igra.rezultat.get(Polje.BEL) < Vodja2.igra.rezultat.get(Polje.CRN)) crni++;
-		else beli++;
-		System.out.println("Crni: " + crni + " : " + "Beli: " + beli);
-		long t2 = System.currentTimeMillis();
-		
-		System.out.println(t2 - t1);
-		//System.out.println("KONEC");
-		//System.out.println();
-		i++;
+			//System.out.println("ZAČETEK");
+			long t1 = System.currentTimeMillis();
+			
+			Vodja2.igramoNovoIgro2();
+			System.out.println("CRN: " + Vodja2.igra.rezultat.get(Polje.CRN) + "   BEL: " + Vodja2.igra.rezultat.get(Polje.BEL));
+			if (Vodja2.igra.rezultat.get(Polje.BEL) < Vodja2.igra.rezultat.get(Polje.CRN)) crni++;
+			else beli++;
+			System.out.println("Crni: " + crni + " : " + "Beli: " + beli);
+			long t2 = System.currentTimeMillis();
+			
+			System.out.println(t2 - t1);
+			//System.out.println("KONEC");
+			//System.out.println();
+			i++;
 		}
 		System.out.println("Crni: " + crni + " : " + "Beli: " + beli);
 		

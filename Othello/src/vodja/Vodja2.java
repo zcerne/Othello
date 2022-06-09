@@ -53,7 +53,7 @@ public class Vodja2 {
 		//okno.repaint();
 		if (okno != null) okno.osveziGUI();
 		
-		switch(igra.stanjeIgre()) {
+		switch(igra.stanjeIgre) {
 		case NEODLOCENO:
 			//System.out.println("NEODLOČENO");
 			return;
@@ -67,8 +67,6 @@ public class Vodja2 {
 			return;
 		case V_TEKU:
 			
-			if(!moznost2()) igrajPotezo2(null);
-			else {
 				VrstaIgralca vrstaNaVrsti = vrstaIgralca.get(igra.naVrsti);
 				switch(vrstaNaVrsti) {
 				case C:
@@ -77,7 +75,7 @@ public class Vodja2 {
 				case R: racunalnikovaPoteza2();
 					
 					break;
-				}
+				
 			}
 		}
 	}
