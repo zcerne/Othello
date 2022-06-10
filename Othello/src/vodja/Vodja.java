@@ -114,8 +114,6 @@ public class Vodja {
 	
 	//preverja kdo ali kaj je na vrsti in ja...
 	public static void igramo() {
-		igra.naPotezi();
-		igra.prestejTocke();
 		//igra.rezultat();
 		okno.repaint();
 		if (okno != null) okno.osveziGUI();
@@ -155,7 +153,7 @@ public class Vodja {
 	
 	public static Inteligenca inteligenca = new Inteligenca();
 	public static Minimax minimax = new Minimax(1);
-	public static MCTS mcts = new MCTS(2000);
+	public static MCTS mcts = new MCTS(2);
 
 	
 	private static void racunalnikovaPoteza() {
@@ -172,16 +170,15 @@ public class Vodja {
 				Poteza racPoteza = null;
 				
 				switch(igra.naVrsti) {
-				case CRN: 
-					racPoteza = mcts.izberiPotezo(igra);
+				case CRN:
+					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				case BEL: 
-					racPoteza = inteligenca.izberiPotezo(igra);
-
-
+					racPoteza = mcts.izberiPotezo(igra);
 					break;
 				}
 				igrajPotezo(racPoteza);
+				//System.out.println("stanje: " + igra.stanjeIgre);
 				
 				}
 
@@ -199,11 +196,5 @@ public class Vodja {
 		igramo();
 	}
 
-	public static boolean moznost() {
-		if(!igra.moznost()) {
-			//System.out.println(igra.stejMoznosti);
-			//System.out.println(igra.naVrsti + "Nimaš možnosti");
-		}
-		return igra.moznost();
-		}
+
 	}

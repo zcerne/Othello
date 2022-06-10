@@ -2,6 +2,7 @@ package logika;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -11,9 +12,8 @@ public class Igra {
 	
 	public Polje[][] polja;
 	public Igralec naVrsti;
-	
 	private static Random random = new Random ();
-	
+	public ArrayList<Poteza> dovoljenePoteze;
 	public static int N;
 	public int stejMoznosti;
 	
@@ -31,22 +31,14 @@ public class Igra {
 		}
 		
 		polja[N/2-1][N/2-1] = Polje.CRN;
-		polja[N/2-1][N/2] = Polje.BEL;
 		polja[N/2][N/2-1] = Polje.BEL;
-		polja[N/2][N/2] = Polje.CRN;
-		polja[N/2][N/2] = Polje.CRN;
-		
+		polja[N/2-1][N/2] = Polje.CRN;
+		polja[N/2][N/2] = Polje.BEL;
 		/*polja[0][0] = Polje.CRN;
-		polja[0][1] = Polje.BEL;
-		polja[1][0] = Polje.BEL;
-		polja[1][1] = Polje.CRN;
-		//polja[1][2] = Polje.BEL;
-		polja[2][1] = Polje.BEL;
-		//polja[2][2] = Polje.CRN;
-		//polja[2][0] = Polje.CRN;
-		//polja[0][2] = Polje.CRN;*/
+		polja[2][0] = Polje.BEL;
+		polja[3][0] = Polje.CRN;*/
+		//polja[N/2][N/2] = Polje.BEL;
 
-		
 		naVrsti = Igralec.BEL;
 		
 		stejMoznosti = 0;
@@ -54,7 +46,7 @@ public class Igra {
 		rezultat = new EnumMap<Polje, Integer>(Polje.class);
 		rezultat.put(Polje.CRN, 2);
 		rezultat.put(Polje.BEL, 2);
-		
+		moznePoteze();
 		stanjeIgre = Stanje.V_TEKU;
 		
 	}
@@ -66,30 +58,37 @@ public class Igra {
 				this.polja[i][j] = igra.polja[i][j];
 			}
 		}
-		stejMoznosti = igra.stejMoznosti;
+		this.stejMoznosti = igra.stejMoznosti;
 		this.rezultat = igra.rezultat;
 		this.naVrsti = igra.naVrsti;
+		this.rezultat = igra.rezultat;
+		this.stanjeIgre = igra.stanjeIgre;
+		moznePoteze();
+		
 	}
 	// Igra nova = Igra(stara)
 	public boolean odigraj(Poteza poteza) {
-			ArrayList<Poteza> dobljeniZetoni = izvediPotezo(poteza);
-			if(dobljeniZetoni.size() != 0) {
-				int i = poteza.getX();
-				int j = poteza.getY();
-				polja[i][j] = naVrsti.dobiPolje(); //vrne vse krogce na katere poteza vpliva 
-				for(Poteza izb : dobljeniZetoni) {
-					int x = izb.getX();
-					int y = izb.getY();
-					polja[x][y] = naVrsti.dobiPolje(); //in jih nato obrne 
-				}
-				naVrsti = naVrsti.obrat();
-				moznePoteze();
-				stanjeIgre = stanjeIgre();
-				return true;
+		//System.out.println(rezultat.get(Polje.BEL) + rezultat.get(Polje.CRN));
+		ArrayList<Poteza> dobljeniZetoni = dobljeni(poteza);
+		if(dobljeniZetoni.size() != 0) {
+			int i = poteza.getX();
+			int j = poteza.getY();
+			polja[i][j] = naVrsti.dobiPolje(); //vrne vse krogce na katere poteza vpliva 
+			for(Poteza izb : dobljeniZetoni) {
+				int x = izb.getX();
+				int y = izb.getY();
+				polja[x][y] = naVrsti.dobiPolje(); //in jih nato obrne 
 			}
+			posodobiRezultat(dobljeniZetoni.size());
+			naVrsti = naVrsti.obrat();
+			moznePoteze();
+			stanjeIgre = stanjeIgre();
+			//dovoljenePoteze = dovoljenePoteze();
+			return true;
+		}
 			
-			else {
-				return false;
+		else {
+			return false;
 		}
 		
 	}
@@ -102,16 +101,16 @@ public class Igra {
 			if(dovoljenePoteze().size() == 0) {
 				stejMoznosti +=1;
 				naVrsti = naVrsti.obrat();
+				
 			}
-			
-			
+
 		}
 		else stejMoznosti = 0;
 		
 	}
 	
 	public boolean lahkoOdigram(Poteza poteza) {
-		ArrayList<Poteza> dobljeniZetoni = izvediPotezo(poteza);
+		ArrayList<Poteza> dobljeniZetoni = dobljeni(poteza);
 		if(dobljeniZetoni.size() != 0) {//vrne vse krogce na katere poteza vpliva 
 			
 			return true;
@@ -120,10 +119,23 @@ public class Igra {
 		return false;
 	}
 	
-	public void naPotezi() {
+	public ArrayList<Poteza> dovoljenePoteze(){
+		ArrayList<Poteza> volni = new ArrayList<Poteza>();
+		for(int i = 0; i < N; i++) {
+			for(int j = 0; j < N; j++) {
+				Poteza poteza = new Poteza(i,j);
+				boolean dovoljena = lahkoOdigram(poteza);
+				if (dovoljena) {
+					volni.add(poteza);
+					//listList.add(izbrani); #to bi mogl bit vsi k jih obrnem s to potezo
+				}
+			}
+		}
+		
+		return volni;
 	}
-	
-	public ArrayList<Poteza> izvediPotezo(Poteza poteza) {
+
+	public ArrayList<Poteza> dobljeni(Poteza poteza) {
 		ArrayList<Poteza> izbrani = new ArrayList<>();
 		int ii = poteza.getX();
 		int jj = poteza.getY();
@@ -163,25 +175,15 @@ public class Igra {
 		return izbrani; //vrnem vse žetone, ki jih s to potezo dobim
 	}
 	
-	public ArrayList<Poteza> dovoljenePoteze(){ 
-		ArrayList<Poteza> volni = new ArrayList<>();
-		//ArrayList<ArrayList<int[]>> listList = new ArrayList<>();
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < N; j++) {
-				Poteza poteza = new Poteza(i,j);
-				boolean dovoljena = lahkoOdigram(poteza);
-				if (dovoljena) {
-					volni.add(poteza);
-					//listList.add(izbrani); #to bi mogl bit vsi k jih obrnem s to potezo
-				}
-			}
-		}
+	public void posodobiRezultat(int razlika) {
+		Polje p1 = naVrsti.dobiPolje();
+		Polje p2 = naVrsti.obrat().dobiPolje();
+		int r1 = rezultat.get(p1);
+		int r2 = rezultat.get(p2);
+		rezultat.put(p1, r1 + razlika+1);
+		rezultat.put(p2, r2-razlika);
 		
-		return volni;
-	}
-	
-	public void prestejTocke() {
-		int crni = 0;
+		/*int crni = 0;
 		int beli = 0;
 		
 		for (Polje[] poljei : polja) {
@@ -197,7 +199,7 @@ public class Igra {
 			}
 		}
 		rezultat.put(Polje.CRN, crni);
-		rezultat.put(Polje.BEL, beli);
+		rezultat.put(Polje.BEL, beli);*/
 	}
 	
 	public String rezultat() {
@@ -206,16 +208,8 @@ public class Igra {
 		
 	}
 	
-	public boolean moznost() {
-		ArrayList<Poteza> poteze = dovoljenePoteze();
-		if(poteze.size() == 0) { // če pač ni možnosti ni možnosti in spet zamenja igralca
-			return false;
-		}
-		return true;
-	}
-	
 	//vrne stanje igre. Očitno je mogoče da se celotna plošča sploh ne zapolni. Zato tok komplikacij. Za primer če noben nima možnosti sem "preprosto" (lol) vpelajl counter nemožnosti.
-	public Stanje stanjeIgre() {		
+	public Stanje stanjeIgre() {
 		if(rezultat.get(Polje.BEL) + rezultat.get(Polje.CRN) == N*N || stejMoznosti >= 2) {
 			
 			if(rezultat.get(Polje.CRN) < rezultat.get(Polje.BEL)) return Stanje.ZMAGA_BEL;

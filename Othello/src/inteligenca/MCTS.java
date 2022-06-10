@@ -9,6 +9,7 @@ import java.util.Random;
 
 import logika.Igra;
 import logika.Igralec;
+import logika.Polje;
 import logika.Stanje;
 import splosno.Poteza;
 
@@ -29,23 +30,30 @@ public class MCTS extends Inteligenca {
 	@Override
 	public Poteza izberiPotezo (Igra igra) {
 		this.count = 0;
-		Poteza najboljsaPoteza = monte_carlo_tree_search(igra, this.obseg, igra.naVrsti);
+		Igra g = new Igra(igra);
+		Poteza najboljsaPoteza = monte_carlo_tree_search(g, this.obseg, igra.naVrsti);
 		return najboljsaPoteza;	
 	}
 	
 	public Poteza monte_carlo_tree_search(Igra igra, int globina, Igralec jaz) {
 		this.jaz = jaz;
-		Veja root = new Veja(igra, 0 , 0,0, null);
+		Veja root = new Veja(igra, 0 , 0, 0, null);
+		
 		while (count < obseg) {
 			//System.out.println(0);
-
+			
 			Veja list = izberivejo(root);
+			
 	        
-	        //System.out.println(1);
 	        Stanje rezultat = simulacija(list);
+	        
+	        
 	        //System.out.println(rezultat);
 	        //System.out.println(2);
 	        backpropagate(list, rezultat);
+	        
+	        //System.out.println("stanje Igre: " + rezultat);
+	        
 	        //System.out.println(3);
 	        count++;}
 	    Veja node = best_child(root);
@@ -93,12 +101,11 @@ public class MCTS extends Inteligenca {
 	    
 	
 	public Stanje simulacija(Veja node) {
-		
-	
-		Igra odigraj = new Igra(node.getIgra());
-		
-		//System.out.println(odigraj.stanjeIgre());
-		while (odigraj.stanjeIgre() == Stanje.V_TEKU) {
+		System.out.println("rezultat: " + (node.getIgra().rezultat.get(Polje.BEL) + node.getIgra().rezultat.get(Polje.CRN)));
+		Igra odigraj = new Igra(node.igra);
+
+		while (odigraj.stanjeIgre == Stanje.V_TEKU) {
+			System.out.println("rezultat: " + (node.getIgra().rezultat.get(Polje.BEL) + node.getIgra().rezultat.get(Polje.CRN)));
 			ArrayList<Poteza> na_voljo = odigraj.dovoljenePoteze();
 //			System.out.println("Dovoljene potezeee " + na_voljo.size());
 			int dolzina = na_voljo.size();
@@ -110,9 +117,12 @@ public class MCTS extends Inteligenca {
 			else if(dolzina == 0)System.out.println("PROBLEM V MCTS 102!!!!");
 			
 			odigraj.odigraj(poteza);
+			
 			}
-		//System.out.println(odigraj.stanjeIgre());
-		return odigraj.stanjeIgre();
+		//System.out.println("rezultat: " + (node.getIgra().rezultat.get(Polje.BEL) + node.getIgra().rezultat.get(Polje.CRN)));
+		//System.out.println("rezultat: " + (odigraj.rezultat.get(Polje.BEL) + odigraj.rezultat.get(Polje.CRN)));
+		//System.out.println("stanje Igre: " + odigraj.stanjeIgre());
+		return odigraj.stanjeIgre;
 		}
 	
 	

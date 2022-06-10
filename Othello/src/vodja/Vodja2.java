@@ -47,8 +47,6 @@ public class Vodja2 {
 	
 	//preverja kdo ali kaj je na vrsti in ja...
 	public static void igramo2() {
-		igra.naPotezi();
-		igra.prestejTocke();
 		//igra.rezultat();
 		//okno.repaint();
 		if (okno != null) okno.osveziGUI();
@@ -104,10 +102,6 @@ public class Vodja2 {
 				igrajPotezo2(racPoteza);
 	}
 	
-
-	
-	
-	
 	public static void igrajPotezo2(Poteza poteza) {
 		if(igra.odigraj(poteza)) {
 			//igra.naVrsti = igra.naVrsti.obrat(); // zamenja igralca
@@ -117,11 +111,4 @@ public class Vodja2 {
 		igramo2();
 	}
 
-	public static boolean moznost2() {
-		if(!igra.moznost()) {
-			//System.out.println(igra.stejMoznosti);
-			//System.out.println(igra.naVrsti + "Nimaš možnosti");
-		}
-		return igra.moznost();
-		}
 	}

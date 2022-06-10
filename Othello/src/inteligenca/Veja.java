@@ -29,7 +29,7 @@ public class Veja {
 	public void makebaby() {
 		for (Poteza p : igra.dovoljenePoteze()) {
 			Igra od_p = new Igra(igra);
-			od_p.izvediPotezo(p);
+			od_p.dobljeni(p);
 			Veja baby = new Veja(od_p, 0 ,0,0, this);
 			baby.poteza = p;
 			this.otroci.add(baby);

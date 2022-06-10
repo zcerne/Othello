@@ -155,7 +155,7 @@ public class Okno extends JFrame implements ActionListener, MouseListener {
 			status.setText("Izberi igro.");
 		}
 		else {
-			switch(Vodja.igra.stanjeIgre()) {
+			switch(Vodja.igra.stanjeIgre) {
 			case NEODLOCENO: status.setText("Neodločeno!"); break;
 			case V_TEKU: 
 				status.setText(Vodja.igra.naVrsti + 
