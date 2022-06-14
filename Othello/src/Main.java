@@ -13,8 +13,8 @@ import vodja.VrstaIgralca;
 public class Main {
 
 	public static void main(String[] args) {
-		normalnaIgra();
-		//testHitrosti();
+		//normalnaIgra();
+		testHitrosti();
 
 	}
 	

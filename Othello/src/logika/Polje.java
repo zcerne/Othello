@@ -8,5 +8,11 @@ public enum Polje {
 		else if(this == BEL) return CRN;
 		return PRAZNO;
 	}
+	
+	public String toString() {
+		if(this == CRN)return "C";
+		else if(this == BEL) return "B";
+		else return "O"; 
+	}
 }
 

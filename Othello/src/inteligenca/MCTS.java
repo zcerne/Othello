@@ -57,9 +57,9 @@ public class MCTS extends Inteligenca {
 	        //System.out.println(3);
 	        count++;}
 	    Veja node = best_child(root);
-	    System.out.println("zmage: " + node.wins);
-	    System.out.println("porazi: " + node.porazi);
-	    System.out.println("obiski: " + node.visits);
+	    //System.out.println("zmage: " + node.wins);
+	    //System.out.println("porazi: " + node.porazi);
+	    //System.out.println("obiski: " + node.visits);
 	    return node.getPoteza();
 
 	}
@@ -101,11 +101,9 @@ public class MCTS extends Inteligenca {
 	    
 	
 	public Stanje simulacija(Veja node) {
-		System.out.println("rezultat: " + (node.getIgra().rezultat.get(Polje.BEL) + node.getIgra().rezultat.get(Polje.CRN)));
 		Igra odigraj = new Igra(node.igra);
 
 		while (odigraj.stanjeIgre == Stanje.V_TEKU) {
-			System.out.println("rezultat: " + (node.getIgra().rezultat.get(Polje.BEL) + node.getIgra().rezultat.get(Polje.CRN)));
 			ArrayList<Poteza> na_voljo = odigraj.dovoljenePoteze();
 //			System.out.println("Dovoljene potezeee " + na_voljo.size());
 			int dolzina = na_voljo.size();
@@ -119,16 +117,12 @@ public class MCTS extends Inteligenca {
 			odigraj.odigraj(poteza);
 			
 			}
-		//System.out.println("rezultat: " + (node.getIgra().rezultat.get(Polje.BEL) + node.getIgra().rezultat.get(Polje.CRN)));
-		//System.out.println("rezultat: " + (odigraj.rezultat.get(Polje.BEL) + odigraj.rezultat.get(Polje.CRN)));
-		//System.out.println("stanje Igre: " + odigraj.stanjeIgre());
 		return odigraj.stanjeIgre;
 		}
 	
 	
 	public void backpropagate(Veja node, Stanje stanje) {
 		while (node.tata != null) {
-			
 			if (node.igra.naVrsti == jaz){
 				if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.CRN) node.wins++;
 				else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.BEL) node.wins++;

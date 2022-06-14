@@ -116,6 +116,7 @@ public class Vodja {
 	public static void igramo() {
 		//igra.rezultat();
 		okno.repaint();
+		System.out.println("stejMoznosti: " + igra.stejMoznosti);
 		if (okno != null) okno.osveziGUI();
 		if(stanjeZaslona == StanjeZaslona.MENU) {
 			igra = null;
@@ -129,7 +130,7 @@ public class Vodja {
 			return;
 		case ZMAGA_BEL:
 			System.out.println("BELI ZMAGA");
-			//igra.rezultat();
+			
 			return;
 		case ZMAGA_CRN:
 			System.out.println("ČRNI ZMAGA");
@@ -153,7 +154,7 @@ public class Vodja {
 	
 	public static Inteligenca inteligenca = new Inteligenca();
 	public static Minimax minimax = new Minimax(1);
-	public static MCTS mcts = new MCTS(2);
+	public static MCTS mcts = new MCTS(2000);
 
 	
 	private static void racunalnikovaPoteza() {
@@ -171,10 +172,10 @@ public class Vodja {
 				
 				switch(igra.naVrsti) {
 				case CRN:
-					racPoteza = inteligenca.izberiPotezo(igra);
+					racPoteza = mcts.izberiPotezo(igra);
 					break;
 				case BEL: 
-					racPoteza = mcts.izberiPotezo(igra);
+					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				}
 				igrajPotezo(racPoteza);

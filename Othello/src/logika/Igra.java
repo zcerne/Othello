@@ -34,10 +34,6 @@ public class Igra {
 		polja[N/2][N/2-1] = Polje.BEL;
 		polja[N/2-1][N/2] = Polje.CRN;
 		polja[N/2][N/2] = Polje.BEL;
-		/*polja[0][0] = Polje.CRN;
-		polja[2][0] = Polje.BEL;
-		polja[3][0] = Polje.CRN;*/
-		//polja[N/2][N/2] = Polje.BEL;
 
 		naVrsti = Igralec.BEL;
 		
@@ -46,7 +42,9 @@ public class Igra {
 		rezultat = new EnumMap<Polje, Integer>(Polje.class);
 		rezultat.put(Polje.CRN, 2);
 		rezultat.put(Polje.BEL, 2);
-		moznePoteze();
+		dovoljenePoteze = dovoljenePoteze();
+		
+		//moznePoteze();
 		stanjeIgre = Stanje.V_TEKU;
 		
 	}
@@ -61,32 +59,34 @@ public class Igra {
 		this.stejMoznosti = igra.stejMoznosti;
 		this.rezultat = igra.rezultat;
 		this.naVrsti = igra.naVrsti;
-		this.rezultat = igra.rezultat;
+		this.rezultat = new EnumMap<Polje, Integer>(Polje.class);
+		rezultat.put(Polje.CRN, igra.rezultat.get(Polje.CRN));
+		rezultat.put(Polje.BEL, igra.rezultat.get(Polje.BEL));
 		this.stanjeIgre = igra.stanjeIgre;
+		dovoljenePoteze = igra.dovoljenePoteze();
 		moznePoteze();
 		
 	}
 	// Igra nova = Igra(stara)
 	public boolean odigraj(Poteza poteza) {
-		//System.out.println(rezultat.get(Polje.BEL) + rezultat.get(Polje.CRN));
-		ArrayList<Poteza> dobljeniZetoni = dobljeni(poteza);
-		if(dobljeniZetoni.size() != 0) {
+		if(dovoljenePoteze.contains(poteza)) {
+			ArrayList<Poteza> dobljeniZetoni = dobljeni(poteza);
 			int i = poteza.getX();
 			int j = poteza.getY();
 			polja[i][j] = naVrsti.dobiPolje(); //vrne vse krogce na katere poteza vpliva 
 			for(Poteza izb : dobljeniZetoni) {
 				int x = izb.getX();
 				int y = izb.getY();
-				polja[x][y] = naVrsti.dobiPolje(); //in jih nato obrne 
+				polja[x][y] = naVrsti.dobiPolje(); //in jih nato obrne
 			}
 			posodobiRezultat(dobljeniZetoni.size());
 			naVrsti = naVrsti.obrat();
+			dovoljenePoteze = dovoljenePoteze();
 			moznePoteze();
 			stanjeIgre = stanjeIgre();
-			//dovoljenePoteze = dovoljenePoteze();
 			return true;
 		}
-			
+		
 		else {
 			return false;
 		}
@@ -95,18 +95,17 @@ public class Igra {
 	
 	private void moznePoteze() {
 		
-		if(dovoljenePoteze().size() == 0) {
+		if(dovoljenePoteze.size() == 0) {
 			stejMoznosti +=1;
 			naVrsti = naVrsti.obrat();
-			if(dovoljenePoteze().size() == 0) {
+			dovoljenePoteze = dovoljenePoteze();
+			if(dovoljenePoteze.size() == 0) {
 				stejMoznosti +=1;
 				naVrsti = naVrsti.obrat();
-				
 			}
-
+			else stejMoznosti = 0;
 		}
 		else stejMoznosti = 0;
-		
 	}
 	
 	public boolean lahkoOdigram(Poteza poteza) {
@@ -127,11 +126,9 @@ public class Igra {
 				boolean dovoljena = lahkoOdigram(poteza);
 				if (dovoljena) {
 					volni.add(poteza);
-					//listList.add(izbrani); #to bi mogl bit vsi k jih obrnem s to potezo
 				}
 			}
 		}
-		
 		return volni;
 	}
 
@@ -226,6 +223,17 @@ public class Igra {
 	public Polje[][] getPlosca() {
 		
 		return polja;
+	}
+	
+	public void printIgra() {
+		for (Polje[] v : polja) {
+			String s = "";
+			for(Polje p : v) {
+				s += p.toString();
+			}
+			System.out.println(s);
+		}
+		
 	}
 	
 }
