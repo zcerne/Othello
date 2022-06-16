@@ -37,18 +37,19 @@ public class Igra {
 
 		naVrsti = Igralec.BEL;
 		
-		stejMoznosti = 0;
+		stejMoznosti = 0; //steje igre ko nihče nima na voljo poteze. Gre le do 2
 		
-		rezultat = new EnumMap<Polje, Integer>(Polje.class);
+		rezultat = new EnumMap<Polje, Integer>(Polje.class); //spremlja rezultat
 		rezultat.put(Polje.CRN, 2);
 		rezultat.put(Polje.BEL, 2);
-		dovoljenePoteze = dovoljenePoteze();
+		dovoljenePoteze = dovoljenePoteze(); //po vsaki poteze izračuna vse poteze ki so na voljo
 		
 		//moznePoteze();
-		stanjeIgre = Stanje.V_TEKU;
+		stanjeIgre = Stanje.V_TEKU; //stanje igre pač
 		
 	}
 	
+	//ustvarjanje nove igre. Kopiram vsako stvar
 	public Igra(Igra igra) {
 		this.polja = new Polje[N][N];
 		for (int i = 0; i < N; i++) {
@@ -64,26 +65,27 @@ public class Igra {
 		rezultat.put(Polje.BEL, igra.rezultat.get(Polje.BEL));
 		this.stanjeIgre = igra.stanjeIgre;
 		dovoljenePoteze = igra.dovoljenePoteze();
-		moznePoteze();
+		moznePoteze();//preveri ali imata igralca sploh kakšno možnost
 		
 	}
-	// Igra nova = Igra(stara)
+	
+	// odigram potezo
 	public boolean odigraj(Poteza poteza) {
-		if(dovoljenePoteze.contains(poteza)) {
-			ArrayList<Poteza> dobljeniZetoni = dobljeni(poteza);
+		if(dovoljenePoteze.contains(poteza)) { //preverim ali je poteza sploh izvedljiva
+			ArrayList<Poteza> dobljeniZetoni = dobljeni(poteza); //dobljeni žetoni, ki jih dobim s potezo
 			int i = poteza.getX();
 			int j = poteza.getY();
-			polja[i][j] = naVrsti.dobiPolje(); //vrne vse krogce na katere poteza vpliva 
+			polja[i][j] = naVrsti.dobiPolje(); //spremenim vrednost polj
 			for(Poteza izb : dobljeniZetoni) {
 				int x = izb.getX();
 				int y = izb.getY();
 				polja[x][y] = naVrsti.dobiPolje(); //in jih nato obrne
 			}
-			posodobiRezultat(dobljeniZetoni.size());
-			naVrsti = naVrsti.obrat();
-			dovoljenePoteze = dovoljenePoteze();
-			moznePoteze();
-			stanjeIgre = stanjeIgre();
+			posodobiRezultat(dobljeniZetoni.size()); //posodobim rezultat
+			naVrsti = naVrsti.obrat(); //zamenjam igralca
+			dovoljenePoteze = dovoljenePoteze(); //posodobim dovoljene poteze
+			moznePoteze(); //preverim ali so poteze mozne
+			stanjeIgre = stanjeIgre(); //posodobim stanje igre
 			return true;
 		}
 		
@@ -93,6 +95,7 @@ public class Igra {
 		
 	}
 	
+	//ali so poteze mozne
 	private void moznePoteze() {
 		
 		if(dovoljenePoteze.size() == 0) {
@@ -108,6 +111,7 @@ public class Igra {
 		else stejMoznosti = 0;
 	}
 	
+	//ali je potezo mozno odigrati
 	public boolean lahkoOdigram(Poteza poteza) {
 		ArrayList<Poteza> dobljeniZetoni = dobljeni(poteza);
 		if(dobljeniZetoni.size() != 0) {//vrne vse krogce na katere poteza vpliva 
@@ -118,6 +122,7 @@ public class Igra {
 		return false;
 	}
 	
+	//najdi vse dovoljene poteze
 	public ArrayList<Poteza> dovoljenePoteze(){
 		ArrayList<Poteza> volni = new ArrayList<Poteza>();
 		for(int i = 0; i < N; i++) {
@@ -131,7 +136,8 @@ public class Igra {
 		}
 		return volni;
 	}
-
+	
+	//vrne žetone ki jih dobim s potezo
 	public ArrayList<Poteza> dobljeni(Poteza poteza) {
 		ArrayList<Poteza> izbrani = new ArrayList<>();
 		int ii = poteza.getX();
@@ -172,6 +178,7 @@ public class Igra {
 		return izbrani; //vrnem vse žetone, ki jih s to potezo dobim
 	}
 	
+	
 	public void posodobiRezultat(int razlika) {
 		Polje p1 = naVrsti.dobiPolje();
 		Polje p2 = naVrsti.obrat().dobiPolje();
@@ -179,24 +186,6 @@ public class Igra {
 		int r2 = rezultat.get(p2);
 		rezultat.put(p1, r1 + razlika+1);
 		rezultat.put(p2, r2-razlika);
-		
-		/*int crni = 0;
-		int beli = 0;
-		
-		for (Polje[] poljei : polja) {
-			for (Polje poljeij : poljei) {
-				switch(poljeij) {
-				case BEL: beli += 1;
-				break;
-				case CRN: crni += 1;
-				break;
-				case PRAZNO:
-				break;
-				}
-			}
-		}
-		rezultat.put(Polje.CRN, crni);
-		rezultat.put(Polje.BEL, beli);*/
 	}
 	
 	public String rezultat() {
@@ -219,21 +208,10 @@ public class Igra {
 		return null;
 	}
 
-	//ne štekam fore statičnih metod. Tko je naredu profesor. Ne vem zaklajajajndjasbfdhuasfvhdsga.
 	public Polje[][] getPlosca() {
 		
 		return polja;
 	}
 	
-	public void printIgra() {
-		for (Polje[] v : polja) {
-			String s = "";
-			for(Polje p : v) {
-				s += p.toString();
-			}
-			System.out.println(s);
-		}
-		
-	}
 	
 }

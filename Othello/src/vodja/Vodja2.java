@@ -19,6 +19,7 @@ import logika.Polje;
 import splosno.Poteza;
 import inteligenca.Inteligenca;
 import inteligenca.MCTS;
+import inteligenca.MCTS2;
 import inteligenca.Minimax;
 
 
@@ -82,6 +83,7 @@ public class Vodja2 {
 	public static Inteligenca inteligenca = new Inteligenca();
 	public static Minimax minimax = new Minimax(5);
 	public static MCTS mcts = new MCTS(2000);
+	public static MCTS2 mcts2 = new MCTS2(4000);
 
 	
 	private static void racunalnikovaPoteza2() {
@@ -91,10 +93,10 @@ public class Vodja2 {
 				
 				switch(igra.naVrsti) {
 				case CRN: 
-					racPoteza = inteligenca.izberiPotezo(igra);
+					racPoteza = mcts2.izberiPotezo(igra);
 					break;
 				case BEL: 
-					racPoteza = mcts.izberiPotezo(igra);
+					racPoteza = inteligenca.izberiPotezo(igra);
 
 
 					break;

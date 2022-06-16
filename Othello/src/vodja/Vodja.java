@@ -19,6 +19,7 @@ import logika.Polje;
 import splosno.Poteza;
 import inteligenca.Inteligenca;
 import inteligenca.MCTS;
+import inteligenca.MCTS2;
 import inteligenca.Minimax;
 
 
@@ -36,15 +37,12 @@ public class Vodja {
 	
 	public static StanjeZaslona stanjeZaslona;
 	
-	//požene se na začetku igre.
-	
+	//požene se na začetku igre. Izbere igro na podlagi pritisnjenega gumba
 	public static void gumb(VrstaGumba gumb) {
+		
 		switch(gumb) {
 		
 		case II:
-			
-			//okno.platnoMenu.setVisible(false);
-			//okno.platnoIgra.setVisible(true);
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
@@ -53,8 +51,6 @@ public class Vodja {
 			break;
 			
 		case IR :
-			//okno.platnoMenu.setVisible(false);
-			//okno.platnoIgra.setVisible(true);
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
@@ -63,8 +59,6 @@ public class Vodja {
 			break;
 		
 		case RI :
-			//okno.platnoMenu.setVisible(false);
-			//okno.platnoIgra.setVisible(true);
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
@@ -74,8 +68,6 @@ public class Vodja {
 			
 		
 		case RR :
-			//okno.platnoMenu.setVisible(false);
-			//okno.platnoIgra.setVisible(true);
 			vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
 			vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
 			vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
@@ -97,6 +89,7 @@ public class Vodja {
 				break;
 		case MENU:
 			stanjeZaslona = StanjeZaslona.MENU;
+			igra = null;
 			
 			break;
 		default:
@@ -114,9 +107,7 @@ public class Vodja {
 	
 	//preverja kdo ali kaj je na vrsti in ja...
 	public static void igramo() {
-		//igra.rezultat();
 		okno.repaint();
-		System.out.println("stejMoznosti: " + igra.stejMoznosti);
 		if (okno != null) okno.osveziGUI();
 		if(stanjeZaslona == StanjeZaslona.MENU) {
 			igra = null;
@@ -130,15 +121,16 @@ public class Vodja {
 			return;
 		case ZMAGA_BEL:
 			System.out.println("BELI ZMAGA");
+			System.out.println(igra.rezultat());
 			
 			return;
 		case ZMAGA_CRN:
 			System.out.println("ČRNI ZMAGA");
-			//igra.rezultat();
+			System.out.println(igra.rezultat());
 			return;
 		case V_TEKU:
 			
-				VrstaIgralca vrstaNaVrsti = vrstaIgralca.get(igra.naVrsti);
+				VrstaIgralca vrstaNaVrsti = vrstaIgralca.get(igra.naVrsti);//določimo ali je na vrsti računalnik ali človek
 				switch(vrstaNaVrsti) {
 				case C:
 					clovekNaPotezi = true;			 
@@ -154,11 +146,11 @@ public class Vodja {
 	
 	public static Inteligenca inteligenca = new Inteligenca();
 	public static Minimax minimax = new Minimax(1);
-	public static MCTS mcts = new MCTS(2000);
-
+	public static MCTS mcts = new MCTS(5000);
+	public static MCTS2 mcts2 = new MCTS2(4000);
 	
 	private static void racunalnikovaPoteza() {
-		
+		//za kasnejši odziv računalnika
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
 			@Override
 			protected Void doInBackground() {
@@ -172,14 +164,13 @@ public class Vodja {
 				
 				switch(igra.naVrsti) {
 				case CRN:
-					racPoteza = mcts.izberiPotezo(igra);
+					racPoteza = mcts2.izberiPotezo(igra);
 					break;
 				case BEL: 
 					racPoteza = inteligenca.izberiPotezo(igra);
 					break;
 				}
 				igrajPotezo(racPoteza);
-				//System.out.println("stanje: " + igra.stanjeIgre);
 				
 				}
 
@@ -190,7 +181,6 @@ public class Vodja {
 	
 	public static void igrajPotezo(Poteza poteza) {
 		if(igra.odigraj(poteza)) {
-			//igra.naVrsti = igra.naVrsti.obrat(); // zamenja igralca
 			zgodovina.add(new Igra(igra));
 			clovekNaPotezi = false;
 		}

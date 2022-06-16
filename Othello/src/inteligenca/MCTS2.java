@@ -14,14 +14,14 @@ import logika.Stanje;
 import splosno.Poteza;
 
 
-public class MCTS extends Inteligenca {
+public class MCTS2 extends Inteligenca {
 	
 	private static Random random = new Random ();
 	
 	private int obseg, count;
 	Igralec jaz;
 	
-	public MCTS (int obseg) {
+	public MCTS2 (int obseg) {
 		this.obseg = obseg;
 	}
 	
@@ -40,46 +40,50 @@ public class MCTS extends Inteligenca {
 		Veja root = new Veja(igra, 0 , 0, 0, null);
 		
 		while (count < obseg) {
-			//System.out.println(0);
-			
+			//System.out.println("Nov krog");
 			Veja list = izberivejo(root);
+			//System.out.println("Izberi Vejo");
 			
 	        
 	        Stanje rezultat = simulacija(list);
-	        
+	        //System.out.println("Simulacija");
 	        
 	        //System.out.println(rezultat);
 	        //System.out.println(2);
 	        backpropagate(list, rezultat);
-	        
+	        //System.out.println("Posodobi");
 	        //System.out.println("stanje Igre: " + rezultat);
 	        
 	        //System.out.println(3);
-	        count++;}
+	        count++;
+	        }
+		//System.out.println("Zanka koncana");
 	    Veja node = best_child(root);
+	    //System.out.println("Najbolsi otrok");
 	    //System.out.println("zmage: " + node.wins);
 	    //System.out.println("porazi: " + node.porazi);
-	    //System.out.println("obiski: " + node.visits);
+	   // System.out.println("obiski: " + node.visits);
 	    return node.getPoteza();
 
 	}
 	    
 	public Veja izberivejo(Veja node){
-//		System.out.println(node.otroci.size());
-//		
-//		System.out.println(node.fullyexpanded());
-
-	    while (node.fullyexpanded()){
+		
+	    while (node.otroci.size() != 0){
 	    	node = UCT.findBestNodeWithUCT(node);
+	    	//System.out.println(node.visits);
 	    }
 	    
 	    return pick_univisted(node); // in case no children are present / node is terminal
  }
 	public Veja pick_univisted(Veja node) {
-		if (!node.isterminal() && node.otroci.size() == 0) {
-			node.makebaby();
-			//System.out.println("ali se razsiri" + node.otroci.size());
-			return node.otroci.get(0);	
+		if (!node.jeKoncna() && node.otroci.size() == 0) {
+			node.ustvariOtroke();
+			
+			
+			int i = (int) ((Math.random() * node.otroci.size()));
+			
+			return node.otroci.get(i);	
 		}
 		else if(node.isterminal()){
 			return node; 
@@ -104,15 +108,13 @@ public class MCTS extends Inteligenca {
 		Igra odigraj = new Igra(node.igra);
 
 		while (odigraj.stanjeIgre == Stanje.V_TEKU) {
-			ArrayList<Poteza> na_voljo = odigraj.dovoljenePoteze();
-//			System.out.println("Dovoljene potezeee " + na_voljo.size());
-			int dolzina = na_voljo.size();
+			int dolzina = odigraj.dovoljenePoteze.size();
 			Poteza poteza = null;
 			if(dolzina != 0) {
 				int randomIndex = random.nextInt(dolzina);
-				poteza = na_voljo.get(randomIndex);
+				poteza = odigraj.dovoljenePoteze.get(randomIndex);
 			}
-			else if(dolzina == 0)System.out.println("PROBLEM V MCTS 102!!!!");
+			else if(dolzina == 0)System.out.println("PROBLEM V MCTS Simulacija 102!!!!");
 			
 			odigraj.odigraj(poteza);
 			
@@ -123,11 +125,11 @@ public class MCTS extends Inteligenca {
 	
 	public void backpropagate(Veja node, Stanje stanje) {
 		while (node.tata != null) {
-			if (node.igra.naVrsti == jaz){
+			if (node.igra.naVrsti == jaz.obrat()){
 				if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.CRN) node.wins++;
 				else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.BEL) node.wins++;
-				else if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.porazi++;
-				else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.porazi++;
+				//else if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.porazi++;
+				//else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.porazi++;
 				
 			}
 			else if (stanje == Stanje.NEODLOCENO) node.wins += 0.5;
@@ -136,13 +138,15 @@ public class MCTS extends Inteligenca {
 			
 		}	
 		if (node.tata == null) {
-			if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.wins++;
-			else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.wins++;
-			else if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.porazi++;
-			else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.porazi++;
-		}
-		else if (stanje == Stanje.NEODLOCENO) node.wins += 0.5;
+			if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.CRN) node.wins++;
+			else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.BEL) node.wins++;
+			else if (stanje == Stanje.NEODLOCENO) node.wins += 0.5;
+			//else if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.porazi++;
+			//else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.porazi++;
 			node.visits++;
+		}
+		
+			
 			
 	}
 	
@@ -153,12 +157,13 @@ public class MCTS extends Inteligenca {
 		          root.otroci,
 		          Comparator.comparing(c -> c.wins));
 		    }*/
+
 		Veja najjaci = null;
-		int obiski = 0;
+		double obiski = 0;
 		for (Veja v : root.otroci) {
-			if (v.visits >= obiski) {
+			if (v.wins >= obiski) {
 				najjaci = v;
-				obiski = v.visits;
+				obiski = v.wins;
 			}
 		}
 		return najjaci;

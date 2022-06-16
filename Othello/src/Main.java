@@ -14,12 +14,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		//normalnaIgra();
-		testHitrosti();
+		testHitrosti(); //brez gui-ja
 
 	}
-	
-	
-	
 	
 	public static void normalnaIgra() {
 		Okno okno = new Okno();
@@ -32,6 +29,7 @@ public class Main {
 		Vodja.stanjeZaslona = StanjeZaslona.MENU;
 	}
 	
+	//uporabi Vodja2, brez gui-ja. Vrne rezultat čas igre in število zmag.
 	public static void testHitrosti() {
 		
 		Vodja2.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
@@ -51,7 +49,7 @@ public class Main {
 			Vodja2.igramoNovoIgro2();
 			System.out.println("CRN: " + Vodja2.igra.rezultat.get(Polje.CRN) + "   BEL: " + Vodja2.igra.rezultat.get(Polje.BEL));
 			if (Vodja2.igra.rezultat.get(Polje.BEL) < Vodja2.igra.rezultat.get(Polje.CRN)) crni++;
-			else beli++;
+			else if(Vodja2.igra.rezultat.get(Polje.BEL) > Vodja2.igra.rezultat.get(Polje.CRN))  beli++;
 			System.out.println("Crni: " + crni + " : " + "Beli: " + beli);
 			long t2 = System.currentTimeMillis();
 			

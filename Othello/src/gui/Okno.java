@@ -29,7 +29,7 @@ public class Okno extends JFrame implements ActionListener, MouseListener {
 	public PlatnoMenu platnoMenu;
 	public PlatnoIgra platnoIgra;
 	
-	private JLabel status;
+	public JLabel status;
 	private JMenuItem igraClovekRacunalnik;
 	private JMenuItem igraRacunalnikClovek;
 	private JMenuItem igraClovekClovek;
