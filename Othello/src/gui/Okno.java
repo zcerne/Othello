@@ -23,18 +23,11 @@ import vodja.Vodja;
 import vodja.VrstaIgralca;
 
 @SuppressWarnings("serial")
-public class Okno extends JFrame implements ActionListener, MouseListener {
+public class Okno extends JFrame implements ActionListener{
 	
-	private Platno platno;
-	public PlatnoMenu platnoMenu;
-	public PlatnoIgra platnoIgra;
+	public Platno platno;
 	
 	public JLabel status;
-	private JMenuItem igraClovekRacunalnik;
-	private JMenuItem igraRacunalnikClovek;
-	private JMenuItem igraClovekClovek;
-	private JMenuItem igraRacunalnikRacunalnik;
-	private JMenuItem igraUndo;
 	private JButton undo;
 
 	private JButton menu;
@@ -45,19 +38,11 @@ public class Okno extends JFrame implements ActionListener, MouseListener {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("Othello");
 		this.setLayout(new GridBagLayout());
-		/*this.addMouseListener(this);
-		this.setFocusable(true);*/
-		
 		
 		//ustvari novo platno
 		platno = new Platno();
-		//platnoMenu = new PlatnoMenu(600,600);
-		//platnoIgra = new PlatnoIgra(600,600);
-		//platnoIgra.setVisible(false);
+
 		this.add(platno);
-		//this.add(platnoIgra);
-		//this.add(platnoMenu);
-		//Vodja.igra = new Igra();
 		
 		JMenuBar menu_bar = new JMenuBar();
 		this.setJMenuBar(menu_bar);
@@ -72,22 +57,6 @@ public class Okno extends JFrame implements ActionListener, MouseListener {
 		menu = new JButton("MENU");
 		menu_bar.add(menu);
 		menu.addActionListener(this);
-		
-		/*igraClovekRacunalnik = new JMenuItem("Človek – računalnik");
-		igra_menu.add(igraClovekRacunalnik);
-		igraClovekRacunalnik.addActionListener(this);
-		
-		igraRacunalnikClovek = new JMenuItem("Računalnik – človek");
-		igra_menu.add(igraRacunalnikClovek);
-		igraRacunalnikClovek.addActionListener(this);
-		
-		igraClovekClovek = new JMenuItem("Človek – človek");
-		igra_menu.add(igraClovekClovek);
-		igraClovekClovek.addActionListener(this);
-		
-		igraRacunalnikRacunalnik = new JMenuItem("Računalnik – računalnik");
-		igra_menu.add(igraRacunalnikRacunalnik);
-		igraRacunalnikRacunalnik.addActionListener(this);*/
 		
 		GridBagConstraints polje_layout = new GridBagConstraints();
 		polje_layout.gridx = 0;
@@ -109,35 +78,11 @@ public class Okno extends JFrame implements ActionListener, MouseListener {
 		getContentPane().add(status, status_layout);
 		
 		status.setText("Izberite igro!");
+		osveziGUI();
 
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		/*if (e.getSource() == igraClovekRacunalnik) {
-			Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
-			Vodja.vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
-			Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
-			Vodja.stanjeZaslona = StanjeZaslona.IGRA;
-			Vodja.igramoNovoIgro();
-		} else if (e.getSource() == igraRacunalnikClovek) {
-			Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
-			Vodja.vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
-			Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
-			Vodja.stanjeZaslona = StanjeZaslona.IGRA;
-			Vodja.igramoNovoIgro();
-		} else if (e.getSource() == igraClovekClovek) {
-			Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
-			Vodja.vrstaIgralca.put(Igralec.CRN, VrstaIgralca.C); 
-			Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.C);
-			Vodja.stanjeZaslona = StanjeZaslona.IGRA;
-			Vodja.igramoNovoIgro();
-		} else if (e.getSource() == igraRacunalnikRacunalnik) {
-			Vodja.vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
-			Vodja.vrstaIgralca.put(Igralec.CRN, VrstaIgralca.R); 
-			Vodja.vrstaIgralca.put(Igralec.BEL, VrstaIgralca.R);
-			Vodja.stanjeZaslona = StanjeZaslona.IGRA;
-			Vodja.igramoNovoIgro();
-		}*/
 		
 		if (Vodja.stanjeZaslona == StanjeZaslona.IGRA  && e.getSource() == undo) {
 			Vodja.gumb(VrstaGumba.UNDO);
@@ -171,44 +116,6 @@ public class Okno extends JFrame implements ActionListener, MouseListener {
 			}
 		}
 		platno.repaint();
-		
-	}
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mousePressed(MouseEvent e) {
-
-		int moseX = e.getX();
-		int moseY = e.getY();
-		switch(Vodja.stanjeZaslona) {
-		case MENU : 
-			platnoMenu.klik(moseX, moseY);
-			
-			break;
-			
-		case IGRA :
-			platnoIgra.klik(moseX, moseY);
-
-			break;
-		}
-		
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 		

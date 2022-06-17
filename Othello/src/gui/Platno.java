@@ -39,7 +39,7 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 	
 	ArrayList<Poteza> izberi;
 	
-	ZaslonMenu zMenu;
+	public ZaslonMenu zMenu;
 	ZaslonIgra zIgra;
 
 	Font newFont;
@@ -74,6 +74,7 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		
 		super.paintComponent(g);
 		if(Vodja.stanjeZaslona == StanjeZaslona.MENU) {
+			
 			this.setBackground(new Color(31, 255, 189));
 			zMenu.width = this.getSize().width;
 			zMenu.height = this.getSize().height;

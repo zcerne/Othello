@@ -35,7 +35,7 @@ public class Igra {
 		polja[N/2-1][N/2] = Polje.CRN;
 		polja[N/2][N/2] = Polje.BEL;
 
-		naVrsti = Igralec.BEL;
+		naVrsti = Igralec.CRN;
 		
 		stejMoznosti = 0; //steje igre ko nihče nima na voljo poteze. Gre le do 2
 		

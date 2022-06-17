@@ -18,7 +18,6 @@ import logika.Igralec;
 import logika.Polje;
 import splosno.Poteza;
 import inteligenca.Inteligenca;
-import inteligenca.MCTS;
 import inteligenca.MCTS2;
 import inteligenca.Minimax;
 
@@ -36,6 +35,13 @@ public class Vodja {
 	public static boolean clovekNaPotezi;
 	
 	public static StanjeZaslona stanjeZaslona;
+	
+	public static VrstaGumba kdoIgraB = VrstaGumba.RAND_B;
+	public static VrstaGumba kdoIgraC = VrstaGumba.RAND_C;
+	
+	public static Inteligenca inteligenca = new Inteligenca();
+	public static Minimax minimax = new Minimax(6);
+	public static MCTS2 mcts2 = new MCTS2(15000);
 	
 	//požene se na začetku igre. Izbere igro na podlagi pritisnjenega gumba
 	public static void gumb(VrstaGumba gumb) {
@@ -89,26 +95,53 @@ public class Vodja {
 				break;
 		case MENU:
 			stanjeZaslona = StanjeZaslona.MENU;
-			igra = null;
+			igramo();
 			
+			break;
+		case MCTS_B:
+			kdoIgraB = VrstaGumba.MCTS_B;
+			okno.osveziGUI();
+			break;
+		case MCTS_C:
+			kdoIgraC = VrstaGumba.MCTS_C;
+			okno.osveziGUI();
+			break;
+		case MINIMAX_B:
+			kdoIgraB = VrstaGumba.MINIMAX_B;
+			okno.osveziGUI();
+			break;
+		case MINIMAX_C:
+			kdoIgraC = VrstaGumba.MINIMAX_C;
+			okno.osveziGUI();
+			break;
+		case RAND_B:
+			kdoIgraB = VrstaGumba.RAND_B;
+			okno.osveziGUI();
+			break;
+		case RAND_C:
+			kdoIgraC = VrstaGumba.RAND_C;
+			okno.osveziGUI();
 			break;
 		default:
 			break;
+			
 		}
 	}
-	
 
 	public static void igramoNovoIgro () {
 		igra = new Igra ();
 		zgodovina = new ArrayList<Igra>();
 		zgodovina.add(new Igra(igra));
+		okno.osveziGUI();
 		igramo ();
 	}
 	
 	//preverja kdo ali kaj je na vrsti in ja...
 	public static void igramo() {
-		okno.repaint();
-		if (okno != null) okno.osveziGUI();
+		if (okno != null) {
+
+			okno.osveziGUI();
+		}
 		if(stanjeZaslona == StanjeZaslona.MENU) {
 			igra = null;
 			okno.osveziGUI();
@@ -136,7 +169,7 @@ public class Vodja {
 					clovekNaPotezi = true;			 
 					break;
 				case R: racunalnikovaPoteza();
-					
+				
 					break;
 				
 			}
@@ -144,48 +177,49 @@ public class Vodja {
 	}
 	// sleep scene kokr je naredu profesor.
 	
-	public static Inteligenca inteligenca = new Inteligenca();
-	public static Minimax minimax = new Minimax(1);
-	public static MCTS mcts = new MCTS(5000);
-	public static MCTS2 mcts2 = new MCTS2(4000);
-	
 	private static void racunalnikovaPoteza() {
 		//za kasnejši odziv računalnika
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void> () {
+		
+		Igra zacetkaIgra = igra;
+		SwingWorker<Poteza, Void> worker = new SwingWorker<Poteza, Void> () {
 			@Override
-			protected Void doInBackground() {
-				try {TimeUnit.MILLISECONDS.sleep(1);} catch (Exception e) {};	
-				return null;
+			protected Poteza doInBackground() {
+				Poteza racPoteza = null;
+				switch(igra.naVrsti) {
+				case CRN:
+					if (kdoIgraC == VrstaGumba.RAND_C) racPoteza = inteligenca.izberiPotezo(zacetkaIgra);
+					else if (kdoIgraC == VrstaGumba.MINIMAX_C) racPoteza = minimax.izberiPotezo(zacetkaIgra);
+					else if (kdoIgraC == VrstaGumba.MCTS_C) racPoteza = mcts2.izberiPotezo(zacetkaIgra);
+					break;
+				
+				case BEL: 
+					if (kdoIgraB == VrstaGumba.RAND_B) racPoteza = inteligenca.izberiPotezo(zacetkaIgra);
+					else if (kdoIgraB == VrstaGumba.MINIMAX_B) racPoteza = minimax.izberiPotezo(zacetkaIgra);
+					else if (kdoIgraB == VrstaGumba.MCTS_B) racPoteza = mcts2.izberiPotezo(zacetkaIgra);
+					break;
+				}
+				//try {TimeUnit.MILLISECONDS.sleep(1);} catch (Exception e) {};	
+				return racPoteza;
 			}
 			@Override
 			protected void done () {
-				
 				Poteza racPoteza = null;
+				try {racPoteza = get();} catch (Exception e) {};
 				
-				switch(igra.naVrsti) {
-				case CRN:
-					racPoteza = mcts2.izberiPotezo(igra);
-					break;
-				case BEL: 
-					racPoteza = inteligenca.izberiPotezo(igra);
-					break;
-				}
 				igrajPotezo(racPoteza);
 				
 				}
 
 		};
 		worker.execute();
+		
 	}
-	
-	
 	public static void igrajPotezo(Poteza poteza) {
-		if(igra.odigraj(poteza)) {
+		if(igra != null && igra.odigraj(poteza)) {
 			zgodovina.add(new Igra(igra));
 			clovekNaPotezi = false;
 		}
 		igramo();
 	}
 
-
-	}
+}
