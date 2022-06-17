@@ -69,7 +69,7 @@ public class ZaslonIgra extends Zaslon{
 		posodobiGumbe();
 		
 		narisiPlosco(g);
-		narisiMoznosti(g);
+		//narisiMoznosti(g);
 		narisiGumbe(g);
 		
 	}
