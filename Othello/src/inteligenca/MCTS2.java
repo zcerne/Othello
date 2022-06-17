@@ -134,7 +134,8 @@ public class MCTS2 extends Inteligenca {
 		          root.otroci,
 		          Comparator.comparing(c -> c.wins));
 		    }
-
+	
+	
 		/*Veja najjaci = null;
 		double obiski = 0;
 		for (Veja v : root.otroci) {
