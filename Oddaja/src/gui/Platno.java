@@ -45,9 +45,7 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 	Font newFont;
 	public Platno() {
 		super();
-		
-		//igra = new Igra();
-		
+
 		sizeX = sizeY = 600; //velikost okna
 		
 		setPreferredSize(new Dimension(sizeX, sizeY));

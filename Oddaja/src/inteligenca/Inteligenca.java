@@ -15,7 +15,6 @@ public class Inteligenca extends KdoIgra{
 	public Poteza izberiPotezo(Igra igra) {
 		ArrayList<Poteza> izbira = igra.dovoljenePoteze();
 			int randomIndex = random.nextInt(izbira.size());
-			//System.out.println(randomIndex);
 			return izbira.get(randomIndex);
 		}
 			

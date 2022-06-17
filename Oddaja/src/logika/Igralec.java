@@ -22,17 +22,3 @@ public enum Igralec {
 		
 	}
 }
-
-//Igralec trenutni = Igra.NaVrsti()
-
-//if trenutni == Igralec.CRN else
-//
-//switch(trenutni) {
-//case CRN:
-//	clovekNaPotezi = true;
-//	 
-//	break;
-//case BEL: racunalnikovaPoteza();
-//	break;
-//	
-//}
