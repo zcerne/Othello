@@ -22,6 +22,9 @@ public enum VrstaGumba {
 		default:
 			break;
 
+
+
+
 		}
 
 		return null;

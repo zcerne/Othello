@@ -83,6 +83,7 @@ public class ZaslonIgra extends Zaslon{
 			for (int i = 0; i < 8; i++) {
 				for (int j = 0; j < 8; j++) {
 					if ((i*a <= moseX && moseX < i*a+a) && (j*a <= moseY && moseY < j*a + a)) {
+						//System.out.println("Pred iskanjem");
 						Poteza poteza = new Poteza(i,j);
 						
 						

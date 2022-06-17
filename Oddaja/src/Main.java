@@ -13,8 +13,8 @@ import vodja.VrstaIgralca;
 public class Main {
 
 	public static void main(String[] args) {
-		//normalnaIgra();
-		testHitrosti(); //brez gui-ja
+		normalnaIgra();
+		//testHitrosti(); //brez gui-ja
 
 	}
 	
@@ -42,6 +42,8 @@ public class Main {
 		int i = 0;
 		while (i < 300) {
 
+		
+			//System.out.println("ZAČETEK");
 			long t1 = System.currentTimeMillis();
 			
 			Vodja2.igramoNovoIgro2();
@@ -51,7 +53,9 @@ public class Main {
 			System.out.println("Crni: " + crni + " : " + "Beli: " + beli);
 			long t2 = System.currentTimeMillis();
 			
-			System.out.println("Cas: " + (t2 - t1) + "ms");
+			System.out.println(t2 - t1);
+			//System.out.println("KONEC");
+			//System.out.println();
 			i++;
 		}
 		System.out.println("Crni: " + crni + " : " + "Beli: " + beli);

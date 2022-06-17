@@ -47,14 +47,21 @@ public class Vodja2 {
 	
 	//preverja kdo ali kaj je na vrsti in ja...
 	public static void igramo2() {
+		//igra.rezultat();
+		//okno.repaint();
 		if (okno != null) okno.osveziGUI();
 		
 		switch(igra.stanjeIgre) {
 		case NEODLOCENO:
+			//System.out.println("NEODLOČENO");
 			return;
 		case ZMAGA_BEL:
+			//System.out.println("BELI ZMAGA");
+			//igra.rezultat();
 			return;
 		case ZMAGA_CRN:
+			//System.out.println("ČRNI ZMAGA");
+			//igra.rezultat();
 			return;
 		case V_TEKU:
 			
@@ -97,6 +104,7 @@ public class Vodja2 {
 	
 	public static void igrajPotezo2(Poteza poteza) {
 		if(igra.odigraj(poteza)) {
+			//igra.naVrsti = igra.naVrsti.obrat(); // zamenja igralca
 			zgodovina.add(new Igra(igra));
 			clovekNaPotezi = false;
 		}

@@ -41,11 +41,14 @@ public class Minimax extends Inteligenca {
 			case NEODLOCENO: ocena = NEODLOC; break;
 			default:
 				// nekdo je na potezi
+				//System.out.println(globina);
 				if (globina == 1) ocena = OceniPozicijo.oceniPozicijo(kopijaIgre, jaz);
 				// globina > 1
 				else ocena = minimax(kopijaIgre, globina-1, jaz).ocena;
-
+				
+				//System.out.println("ocena " + ocena);
 			}
+			//System.out.println(ocena);
 				if (najboljsaPoteza == null
 					// max, če je p moja poteza
 					|| jaz == igra.naVrsti && ocena > najboljsaPoteza.ocena
@@ -53,7 +56,7 @@ public class Minimax extends Inteligenca {
 					|| jaz != igra.naVrsti && ocena < najboljsaPoteza.ocena)
 					najboljsaPoteza = new OcenjenaPoteza (p, ocena);
 		}
-		
+		//System.out.println(najboljsaPoteza); 
 		if(najboljsaPoteza == null) {
 			if(igra.naVrsti == jaz) ocena = -100;
 			else ocena = 100;

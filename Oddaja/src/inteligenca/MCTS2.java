@@ -40,17 +40,29 @@ public class MCTS2 extends Inteligenca {
 		Veja root = new Veja(igra, 0 , 0, 0, null);
 		
 		while (count < obseg) {
+			//System.out.println("Nov krog");
 			Veja list = izberivejo(root);
-
+			//System.out.println("Izberi Vejo");
+			
+	        
 	        Stanje rezultat = simulacija(list);
-
+	        //System.out.println("Simulacija");
+	        
+	        //System.out.println(rezultat);
+	        //System.out.println(2);
 	        backpropagate(list, rezultat);
-
+	        //System.out.println("Posodobi");
+	        //System.out.println("stanje Igre: " + rezultat);
+	        
+	        //System.out.println(3);
 	        count++;
 	        }
-
+		//System.out.println("Zanka koncana");
 	    Veja node = best_child(root);
-
+	    //System.out.println("Najbolsi otrok");
+	    //System.out.println("zmage: " + node.wins);
+	    //System.out.println("porazi: " + node.porazi);
+	   // System.out.println("obiski: " + node.visits);
 	    return node.getPoteza();
 
 	}
@@ -59,6 +71,7 @@ public class MCTS2 extends Inteligenca {
 		
 	    while (node.otroci.size() != 0){
 	    	node = UCT.findBestNodeWithUCT(node);
+	    	//System.out.println(node.visits);
 	    }
 	    
 	    return pick_univisted(node); // in case no children are present / node is terminal
@@ -79,9 +92,14 @@ public class MCTS2 extends Inteligenca {
     	else {
     		for (Veja sin : node.otroci) {
         		if (sin.visits == 0) return sin;
+        		//imam pripombe, bo žiga razmislil
+        		// ga bom prepričal
         	}
     	return node;
-
+    	
+		/*
+		 * System.out.println("Neki je zelo narobe"); return null;
+		 */
     	}
 	}
 	    
@@ -110,6 +128,8 @@ public class MCTS2 extends Inteligenca {
 			if (node.igra.naVrsti == jaz.obrat()){
 				if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.CRN) node.wins++;
 				else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.BEL) node.wins++;
+				//else if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.porazi++;
+				//else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.porazi++;
 				
 			}
 			else if (stanje == Stanje.NEODLOCENO) node.wins += 0.5;
@@ -121,6 +141,8 @@ public class MCTS2 extends Inteligenca {
 			if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.CRN) node.wins++;
 			else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.BEL) node.wins++;
 			else if (stanje == Stanje.NEODLOCENO) node.wins += 0.5;
+			//else if(stanje == Stanje.ZMAGA_CRN && jaz == Igralec.BEL) node.porazi++;
+			//else if (stanje == Stanje.ZMAGA_BEL && jaz == Igralec.CRN) node.porazi++;
 			node.visits++;
 		}
 		
@@ -129,13 +151,14 @@ public class MCTS2 extends Inteligenca {
 	}
 	
 	public Veja best_child(Veja root) {
+		//System.out.println("velikost otrok pred izbiro" + root.otroci.size());
 		
-		 return Collections.max(
+		 /*return Collections.max(
 		          root.otroci,
 		          Comparator.comparing(c -> c.wins));
-		    }
+		    }*/
 
-		/*Veja najjaci = null;
+		Veja najjaci = null;
 		double obiski = 0;
 		for (Veja v : root.otroci) {
 			if (v.wins >= obiski) {
@@ -144,7 +167,7 @@ public class MCTS2 extends Inteligenca {
 			}
 		}
 		return najjaci;
-	}*/
+	}
 }
 	
 	
