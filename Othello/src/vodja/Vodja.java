@@ -41,7 +41,7 @@ public class Vodja {
 	
 	public static Inteligenca inteligenca = new Inteligenca();
 	public static Minimax minimax = new Minimax(5);
-	public static MCTS2 mcts2 = new MCTS2(5000);
+	public static MCTS2 mcts2 = new MCTS2(200);
 	
 	//požene se na začetku igre. Izbere igro na podlagi pritisnjenega gumba
 	public static void gumb(VrstaGumba gumb) {
